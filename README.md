@@ -20,13 +20,16 @@ Trình duyệt ──HTTPS──> Cloudflare ──tunnel──> cloudflared (co
 
 ## Cách chấm (gửi giám khảo)
 
-1. Đăng nhập → **Tổng quan** → bấm **Bắt đầu chấm / Tiếp tục chấm** (mở sản phẩm chưa chấm tiếp theo).
-2. Mỗi tiêu chí đã có sẵn **điểm AI** (viền màu chàm) và lý do. Điểm **của bạn** (màu cam) mặc định bằng điểm AI:
+Mã màu cố định trên mọi trang: **tím** = điểm AI · **cam** = điểm của bạn · **xanh ngọc** = trung bình hội đồng · **xanh lá** = đã chấm · **vàng** = đang chấm.
+
+1. Đăng nhập → **Tổng quan** → bấm **Bắt đầu chấm / Tiếp tục chấm**, hoặc bấm một ô số trong **Bản đồ chấm** (55 ô, tô màu theo trạng thái).
+2. Mỗi tiêu chí đã có sẵn **điểm AI** và lý do. Điểm **của bạn** mặc định bằng điểm AI:
    chỉ sửa tiêu chí không đồng ý: bấm ô số (tiêu chí 5–10 điểm) hoặc kéo thanh / nút − + (tiêu chí 15–20 điểm).
-   Dòng *Mức tham chiếu* cho biết điểm đang chọn ứng với mức nào.
-3. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và trung bình hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
-4. Bấm **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
-5. Phím tắt: `←` `→` chuyển sản phẩm, `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
+   Tiêu chí đã sửa có viền cam và nhãn *Đã sửa*; dòng *Mức tham chiếu* cho biết điểm đang chọn ứng với mức nào.
+3. Dải **9 tiêu chí** ở đầu phiếu chấm luôn hiện khi cuộn: xem nhanh điểm từng tiêu chí, bấm để nhảy tới.
+4. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
+5. Bấm nút xanh lá **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
+6. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
 
 ## Điều kiện
 
