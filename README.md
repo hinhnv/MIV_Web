@@ -86,5 +86,5 @@ Sau khi server khởi động lại, cả 2 container tự chạy lại (`restar
 - Đăng nhập sai 10 lần trong 15 phút thì IP (lấy từ `CF-Connecting-IP`) bị khóa tạm.
 - Header bảo mật: CSP, `X-Frame-Options: DENY`, HSTS, `nosniff`.
 - **Token tunnel là bí mật**: ai có token đều chạy được connector cho domain này. Chỉ để trong `.env` trên server. Lộ token thì vào Cloudflare *Refresh token* rồi sửa `.env`, chạy lại `sh deploy.sh`.
-- Repo chứa toàn bộ hồ sơ (có cả tài khoản dùng thử của thí sinh) và điểm AI: để repo ở chế độ **private**.
+- Repo chứa toàn bộ hồ sơ (có cả tài khoản dùng thử của thí sinh) và điểm AI: sau khi triển khai xong, **xóa repo hoặc chuyển sang private** (Settings › Danger Zone).
 - Có thể thêm lớp **Cloudflare Access** (Zero Trust › Access › Applications) để chỉ email giám khảo mới vào được trang đăng nhập.
