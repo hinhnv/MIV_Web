@@ -164,7 +164,7 @@ main{min-width:0;padding-block:22px 48px;padding-left:max(16px,env(safe-area-ins
 .seg button+button{border-left:1px solid var(--line2)}
 .seg button.on{background:var(--brand);color:#fff}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
-.tabs button{border:0;background:transparent;padding:11px 12px 9px;font-weight:700;font-size:13.5px;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button{border:0;background:transparent;padding:11px 10px 9px;font-weight:700;font-size:13.5px;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
 .tabs button:hover{color:var(--brand-ink)}
 .tabs button.on{color:var(--brand);border-bottom-color:var(--brand)}
 .tabs button .n{font-size:11.5px;background:var(--panel2);border:1px solid var(--line2);border-radius:999px;padding:0 6px;margin-left:5px}
@@ -331,13 +331,15 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
 .compose textarea:focus{border-color:var(--brand);outline:0;box-shadow:0 0 0 3px var(--brand-soft)}
 /* cột phải */
 .pane{position:sticky;top:calc(var(--hdr-h) + env(safe-area-inset-top,0px) + 14px);display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - var(--hdr-h) - 28px);min-width:0}
-.sumcard{padding:16px 18px;display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--gk-fill);background:linear-gradient(180deg,var(--gk-soft) 0,#fff 130px);flex:none}
+.sumcard{padding:14px 16px;display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--gk-fill);background:linear-gradient(180deg,var(--gk-soft) 0,#fff 130px);flex:none}
 .sum-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .sum-top .lbl{font-size:12px;font-weight:800;color:var(--gk);text-transform:uppercase;letter-spacing:.06em}
-.sum-top .big{font-family:var(--f-disp);font-size:50px;font-weight:800;color:var(--gk);line-height:1}
+.sum-top .big{font-family:var(--f-disp);font-size:44px;font-weight:800;color:var(--gk);line-height:1}
 .sum-top .big small{font-size:17px;color:var(--muted);font-weight:700}
 .sum-top .delta{font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
 .sum-r{text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.sum-cmp{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sum-foot{display:flex;justify-content:space-between;align-items:center;gap:6px 8px;flex-wrap:wrap}
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cmp>div{border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;border:1px solid}
 .cmp .c-ai{background:var(--ai-soft);border-color:var(--ai-line);color:var(--ai)}
@@ -348,7 +350,7 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
 .gbar b{color:var(--gk);font-variant-numeric:tabular-nums}
 .status{font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .sumcard details summary{cursor:pointer;font-weight:700;color:var(--brand);font-size:13px}
-.panebox{display:flex;flex-direction:column;min-height:0;overflow:hidden;flex:1 1 auto}
+.panebox{display:flex;flex-direction:column;min-height:260px;overflow:hidden;flex:1 1 auto}
 .panebox .tabs{padding:0 10px;flex:none}
 .panebody{padding:14px 18px;overflow:auto;min-height:0}
 .kv{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 12px;font-size:13.5px}
@@ -360,7 +362,7 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
 .files a:hover{border-color:var(--brand);background:var(--brand-soft2)}
 .files a span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 .files a em{font-style:normal;color:var(--muted);font-size:12px;white-space:nowrap;font-weight:500}
-.fx{flex:none;width:38px;height:26px;border-radius:6px;display:grid;place-items:center;font-size:10.5px;font-weight:800;letter-spacing:.03em;background:var(--panel2);color:#334155;border:1px solid var(--line)}
+.files a .fx,.fx{flex:none;width:38px;overflow:visible;height:26px;border-radius:6px;display:grid;place-items:center;font-size:10.5px;font-weight:800;letter-spacing:.03em;background:var(--panel2);color:#334155;border:1px solid var(--line)}
 .fx.pdf{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}.fx.doc{background:var(--brand-soft);color:var(--brand-ink);border-color:var(--brand-line)}
 .fx.xls{background:var(--good-soft);color:var(--good);border-color:var(--good-line)}.fx.ppt{background:var(--gk-soft);color:var(--gk);border-color:var(--gk-line)}
 .fx.img{background:var(--ai-soft);color:var(--ai);border-color:var(--ai-line)}
@@ -390,6 +392,7 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
   .panebody{overflow:visible}
   .hero{grid-template-columns:minmax(0,1fr)}
 }
+@media (max-height:640px) and (min-width:1101px){.pane{position:static;max-height:none}.panebody{overflow:visible}}
 @media (max-width:900px){
   :root{--hdr-h:0px}
   .top{position:static}
@@ -763,7 +766,7 @@ function vProduct(stt) {
   const allIds = CALC.ids.filter(id => scored(CALC.J[id], stt));
   const note = (S.mine && S.mine.notes && S.mine.notes[stt]) || "";
   const delta = r.mine - r.ai;
-  const tabs = [["hoso", "Hồ sơ", p.files.length], ["ai", "Nhận xét AI", 0], ["gk", "Giám khảo", allIds.length], ["gopy", "Góp ý", cmsP.length]];
+  const tabs = [["hoso", "Hồ sơ", p.files.length], ["ai", "Nhận xét AI", 0], ["gk", "Giám khảo", allIds.length], ["gopy", "Góp ý", cmsP.length], ["note", "Ghi chú", note ? "✓" : 0]];
   let tb = "";
   if (S.tab === "ai") {
     tb = `<div class="sec"><h3 class="h-ai">Tổng hợp</h3><div class="prose">${rich(p.ai.summary)}</div>
@@ -776,6 +779,8 @@ function vProduct(stt) {
   } else if (S.tab === "gk") {
     tb = allIds.length ? `<div class="tbl-wrap"><table class="t" style="font-size:13px"><thead><tr><th>Giám khảo</th>${C.map(c => `<th class="c" title="${esc(c.name)}">${c.tt}</th>`).join("")}<th class="c">Tổng</th></tr></thead><tbody>${allIds.map(id => { const dd = CALC.J[id]; return `<tr style="cursor:default"><td><span class="row-flex" style="gap:6px;flex-wrap:nowrap">${av(id, 22)}<span>${esc(person(id).name)}${dd.confirmed && dd.confirmed[stt] ? ` <span style="color:var(--good);font-weight:800">✓</span>` : ""}</span></span></td>${C.map((c, i) => { const v = eff(dd, p, i); return `<td class="c num"><span class="sc ${v !== p.ai.s[i] ? "chg" : ""}"><b>${v}</b></span></td>`; }).join("")}<td class="c"><span class="tot hd">${jTotal(dd, p)}</span></td></tr>`; }).join("")}<tr style="cursor:default"><td><b class="t-ai">AI</b></td>${p.ai.s.map(v => `<td class="c num t-ai">${v}</td>`).join("")}<td class="c"><span class="tot ai">${r.ai}</span></td></tr></tbody></table></div>
       ${allIds.map(id => (CALC.J[id].notes || {})[stt] ? `<div class="cm" style="margin-top:12px">${av(id)}<div><div class="h"><b>${esc(person(id).name)}</b><span class="tag">Ghi chú</span></div><div class="x">${hl(CALC.J[id].notes[stt])}</div></div></div>` : "").join("")}` : `<div class="empty">Chưa có giám khảo nào chấm sản phẩm này.</div>`;
+  } else if (S.tab === "note") {
+    tb = `<div class="sec"><h3>Ghi chú của tôi</h3><p class="small mut" style="margin:0 0 8px">Ghi chú riêng cho sản phẩm này; giám khảo khác xem được ở tab Giám khảo.</p><textarea id="note-${stt}" class="inp" rows="7" placeholder="Ghi chú cho sản phẩm này…" ${S.canWrite ? "" : "readonly"}>${esc(S.drafts["note-" + stt] != null ? S.drafts["note-" + stt] : note)}</textarea><div class="row-flex" style="margin-top:8px;justify-content:flex-end"><button class="btn pri sm" data-act="savenote" data-stt="${stt}" ${dis}>Lưu ghi chú</button></div></div>`;
   } else if (S.tab === "gopy") {
     tb = `<div class="thread">${cmsP.slice().reverse().map(x => cmItem(x, false)).join("") || `<div class="empty">Chưa có góp ý. Góp ý theo từng tiêu chí nằm dưới mỗi tiêu chí ở phiếu chấm.</div>`}
       ${S.canWrite ? `<div class="compose"><textarea id="cm-${stt}-0" rows="2" placeholder="Góp ý chung cho sản phẩm… (Ctrl+Enter để gửi)">${esc(S.drafts["cm-" + stt + "-0"] || "")}</textarea><button class="btn pri" data-act="addcm" data-stt="${stt}" data-tt="0">Gửi</button></div>` : ""}</div>`;
@@ -793,7 +798,7 @@ function vProduct(stt) {
   const strip = C.map((c, i) => { const v = eff(S.mine, p, i), m = own(S.mine, stt, c.tt), ch = m != null && m !== p.ai.s[i];
     return `<button class="cs ${ch ? "chg" : ""}" data-act="jump" data-tt="${c.tt}" title="TC${c.tt}. ${esc(c.name)}${ch ? " (đã sửa, AI " + p.ai.s[i] + ")" : ""}"><span class="n">${c.tt}</span><b id="cs-${stt}-${c.tt}">${v}</b>/${c.max}</button>`; }).join("");
   const jumpOpts = P.map(q => { const s2 = status(q.stt); return `<option value="${q.stt}" ${q.stt === stt ? "selected" : ""}>${s2 === "done" ? "✓ " : s2 === "doing" ? "✎ " : ""}${esc(q.stt + ". " + q.name.slice(0, 48))}</option>`; }).join("");
-  const saveTxt = S.savedAt ? "Đã lưu lúc " + fmtHM(S.savedAt) : "Tự động lưu khi bạn sửa";
+  const saveTxt = S.savedAt ? "Đã lưu lúc " + fmtHM(S.savedAt) : "Tự lưu khi sửa";
   return `<div class="wrap">
     <div class="crumb"><a href="#bang-diem">Chấm điểm</a> › <span>${esc(p.stt + ". " + p.name.slice(0, 70))}</span></div>
     ${banner()}
@@ -815,13 +820,9 @@ function vProduct(stt) {
       </section>
       <aside class="pane">
         <section class="card sumcard" aria-label="Tổng điểm của tôi">
-          <div class="sum-top"><div><div class="lbl">Tổng điểm của tôi</div><div class="big num">${r.mine}<small>/100</small></div><div class="delta">${delta ? `${delta > 0 ? "Cao hơn" : "Thấp hơn"} AI <b class="${delta > 0 ? "t-ok" : ""}" style="${delta < 0 ? "color:var(--bad)" : ""}">${Math.abs(delta)}</b> điểm` : "Bằng điểm AI"}</div></div><div class="sum-r">${gpill(r.mine)}<span class="small mut">${changed ? `Đã sửa ${changed}/9 tiêu chí` : "Chưa sửa tiêu chí nào"}</span></div></div>
-          <div class="cmp"><div class="c-ai">Điểm AI<b class="num">${r.ai}</b></div><div class="c-hd">TB hội đồng<b class="num">${fmt1(r.avg)}</b><em>${r.n ? r.n + " giám khảo" : "chưa có ai"}</em></div></div>
-          <div class="gbar"><span>Nhóm I</span><span class="bar sm gk"><i style="width:${g1 / 60 * 100}%"></i></span><b>${g1}/60</b><span>Nhóm II</span><span class="bar sm gk"><i style="width:${g2 / 40 * 100}%"></i></span><b>${g2}/40</b></div>
-          <div class="status">${spill(stt)}<span class="mut">${esc(saveTxt)}</span></div>
-          ${done ? `${nx ? `<a class="btn pri block lg" href="#sp-${nx.stt}">Sang sản phẩm chưa chấm tiếp →</a>` : `<span class="pill st-done lg" style="justify-content:center">✓ Bạn đã chấm xong ${N}/${N} sản phẩm</span>`}<div class="row-flex" style="justify-content:space-between"><button class="btn ghost sm" data-act="unconfirm" data-stt="${stt}" ${dis}>Bỏ xác nhận để sửa</button><button class="btn ghost sm" data-act="allai" data-stt="${stt}" ${dis || (changed ? "" : "disabled")}>Đặt lại theo AI</button></div>`
-            : `<button class="btn ok block lg" data-act="confirmnext" data-stt="${stt}" ${dis}>✓ Xác nhận điểm &amp; sang sản phẩm tiếp</button><div class="row-flex" style="justify-content:space-between"><button class="btn ghost sm" data-act="confirm" data-stt="${stt}" ${dis}>Chỉ xác nhận</button><button class="btn ghost sm" data-act="allai" data-stt="${stt}" ${dis || (changed ? "" : "disabled")}>Đặt lại theo AI</button></div>`}
-          <details ${note ? "open" : ""}><summary>Ghi chú của tôi${note ? " ✓" : ""}</summary><textarea id="note-${stt}" class="inp" rows="3" style="margin-top:8px" placeholder="Ghi chú cho sản phẩm này (giám khảo khác xem được)…" ${S.canWrite ? "" : "readonly"}>${esc(S.drafts["note-" + stt] != null ? S.drafts["note-" + stt] : note)}</textarea><div class="row-flex" style="margin-top:6px;justify-content:flex-end"><button class="btn sm" data-act="savenote" data-stt="${stt}" ${dis}>Lưu ghi chú</button></div></details>
+          <div class="sum-top"><div><div class="lbl">Tổng điểm của tôi</div><div class="big num">${r.mine}<small>/100</small></div></div><div class="sum-r">${gpill(r.mine)}<div class="sum-cmp"><span class="tot ai sm" title="Tổng điểm AI">AI ${r.ai}</span><span class="tot hd sm" title="Trung bình hội đồng${r.n ? " (" + r.n + " giám khảo)" : ""}">Hội đồng ${fmt1(r.avg)}</span></div><span class="small mut">${delta ? `${delta > 0 ? "Cao hơn" : "Thấp hơn"} AI <b style="color:var(${delta > 0 ? "--good" : "--bad"})">${Math.abs(delta)}</b>` : "Bằng điểm AI"}${changed ? ` · đã sửa ${changed}/9 TC` : ""}</span></div></div>
+          ${done ? (nx ? `<a class="btn pri block lg" href="#sp-${nx.stt}">Sang sản phẩm chưa chấm tiếp →</a>` : `<span class="pill st-done lg" style="justify-content:center">✓ Bạn đã chấm xong ${N}/${N} sản phẩm</span>`) : `<button class="btn ok block lg" data-act="confirmnext" data-stt="${stt}" ${dis}>✓ Xác nhận điểm &amp; sang sản phẩm tiếp</button>`}
+          <div class="sum-foot"><span class="status">${spill(stt)}<span class="mut">${esc(saveTxt)}</span></span><span class="row-flex" style="gap:2px">${done ? `<button class="btn ghost sm" data-act="unconfirm" data-stt="${stt}" ${dis}>Bỏ xác nhận</button>` : `<button class="btn ghost sm" data-act="confirm" data-stt="${stt}" ${dis}>Chỉ xác nhận</button>`}<button class="btn ghost sm" data-act="allai" data-stt="${stt}" ${dis || (changed ? "" : "disabled")}>Đặt lại theo AI</button></span></div>
         </section>
         <section class="card panebox">
           <div class="tabs" role="tablist">${tabs.map(([k, l, n]) => `<button role="tab" aria-selected="${S.tab === k}" class="${S.tab === k ? "on" : ""}" data-act="tab" data-v="${k}">${l}${n ? `<span class="n">${n}</span>` : ""}</button>`).join("")}</div>

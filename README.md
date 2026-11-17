@@ -57,9 +57,11 @@ Không muốn dùng script thì làm tay: `cp .env.example .env`, điền `TUNNE
 ## Quản lý tài khoản giám khảo
 
 ```bash
-docker compose exec web node server.js user giamkhao1 '<mật khẩu ≥ 8 ký tự>' Giám khảo 1   # thêm mới / đổi mật khẩu / đổi tên
-docker compose exec web node server.js list                                               # danh sách
-docker compose exec web node server.js deluser giamkhao1                                  # xóa, mất quyền ngay
+docker compose exec web node server.js user giamkhao1 '<mật khẩu ≥ 6 ký tự>' Giám khảo 1   # thêm mới / đổi mật khẩu / đổi tên hiển thị
+docker compose exec web node server.js user ten@donvi.vn '<mật khẩu>' Họ và tên            # tên đăng nhập là email cũng được
+docker compose exec web node server.js rename giamkhao1 ten@donvi.vn                       # đổi tên đăng nhập, giữ nguyên điểm đã chấm
+docker compose exec web node server.js list                                                # danh sách
+docker compose exec web node server.js deluser giamkhao1                                   # xóa, mất quyền ngay
 ```
 
 - Đổi mật khẩu thì các phiên đăng nhập cũ của người đó **bị đăng xuất**. Điểm đã chấm vẫn giữ (gắn với ID nội bộ, không gắn với tên).

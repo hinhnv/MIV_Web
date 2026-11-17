@@ -40,15 +40,27 @@ if (cmd === "list" || cmd === "count") {
   else for (const [u, r] of Object.entries(users)) console.log(u + "\t" + r.name);
   process.exit(0);
 }
+// ten dang nhap: chu thuong, so, . _ - @ + (dung duoc email)
+const UNAME_RE = /^[a-z0-9._@+-]{2,64}$/;
+if (cmd === "rename") { // doi ten dang nhap, giu nguyen ID nen giu nguyen diem da cham
+  const users = readJson(USERS_F, {});
+  const [from, to] = args.map(x => String(x || "").trim().toLowerCase());
+  if (!users[from]) { console.error("khong co tai khoan " + from); process.exit(1); }
+  if (!UNAME_RE.test(to) || users[to]) { console.error("ten moi khong hop le hoac da ton tai: " + to); process.exit(1); }
+  users[to] = users[from]; delete users[from];
+  writeJson(USERS_F, users);
+  console.log("da doi " + from + " -> " + to + " (giu nguyen diem da cham)");
+  process.exit(0);
+}
 if (cmd === "user" || cmd === "deluser") {
   const users = readJson(USERS_F, {});
   let [u, pw, ...name] = args;
   if (u) u = u.toLowerCase();
   if (pw === "-") { try { pw = fs.readFileSync(0, "utf8").split(/\r?\n/)[0]; } catch { pw = ""; } }
-  if (!u || !/^[a-z0-9._-]{2,32}$/.test(u)) { console.error("username: 2-32 ky tu a-z 0-9 . _ -"); process.exit(1); }
+  if (!u || !UNAME_RE.test(u)) { console.error("username: 2-64 ky tu a-z 0-9 . _ - @ + (dung duoc email)"); process.exit(1); }
   if (cmd === "deluser") { delete users[u]; }
   else {
-    if (!pw || pw.length < 8) { console.error("password toi thieu 8 ky tu"); process.exit(1); }
+    if (!pw || pw.length < 6) { console.error("password toi thieu 6 ky tu"); process.exit(1); }
     const prev = users[u] || {};
     users[u] = { id: prev.id || crypto.randomUUID(), name: name.join(" ") || prev.name || u, pw: hashPw(pw), canWrite: true };
   }
