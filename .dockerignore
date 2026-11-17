@@ -1,0 +1,10 @@
+data
+backup-*
+.env
+.env.*
+.git
+*.zip
+*.py
+template.html
+README.md
+deploy.sh

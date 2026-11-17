@@ -1,0 +1,36 @@
+# Phong cham MIV 2026 — web + Cloudflare Tunnel (https://miv2026.p-tech.xyz)
+# Chay: sh deploy.sh   (hoac: tao .env tu .env.example roi docker compose up -d --build)
+services:
+  web:
+    build: .
+    image: phong-cham-miv:latest
+    container_name: phong-cham-miv
+    restart: unless-stopped
+    init: true
+    ports:
+      # chi mo tren 127.0.0.1: ra Internet duy nhat qua Cloudflare Tunnel (HTTPS)
+      - "127.0.0.1:${WEB_PORT:-3001}:3001"
+    volumes:
+      - miv-data:/app/data   # tai khoan + diem cham, giu nguyen khi build lai
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: phong-cham-miv-tunnel
+    restart: unless-stopped
+    # mang host: cloudflared goi duoc http://localhost:3001 dung nhu Service URL khai bao trong Cloudflare
+    network_mode: host
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: "${TUNNEL_TOKEN:?Chua co TUNNEL_TOKEN trong file .env (xem .env.example)}"
+    depends_on:
+      web:
+        condition: service_healthy
+    logging: *logging
+
+volumes:
+  miv-data:
