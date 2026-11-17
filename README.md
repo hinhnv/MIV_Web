@@ -18,6 +18,16 @@ Trình duyệt ──HTTPS──> Cloudflare ──tunnel──> cloudflared (co
 | `.env.example` | Mẫu file `.env` (token tunnel, cổng). File `.env` thật **không** vào git. |
 | `template.html`, `build_web.py` | Nguồn để build lại trang khi dữ liệu thay đổi (cần thư mục dữ liệu `E:\MIV2026` trên máy gốc). |
 
+## Cách chấm (gửi giám khảo)
+
+1. Đăng nhập → **Tổng quan** → bấm **Bắt đầu chấm / Tiếp tục chấm** (mở sản phẩm chưa chấm tiếp theo).
+2. Mỗi tiêu chí đã có sẵn **điểm AI** (viền màu chàm) và lý do. Điểm **của bạn** (màu cam) mặc định bằng điểm AI:
+   chỉ sửa tiêu chí không đồng ý: bấm ô số (tiêu chí 5–10 điểm) hoặc kéo thanh / nút − + (tiêu chí 15–20 điểm).
+   Dòng *Mức tham chiếu* cho biết điểm đang chọn ứng với mức nào.
+3. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và trung bình hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
+4. Bấm **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
+5. Phím tắt: `←` `→` chuyển sản phẩm, `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
+
 ## Điều kiện
 
 1. **Server Linux** có Docker Engine + Docker Compose v2 (`docker compose version` chạy được).

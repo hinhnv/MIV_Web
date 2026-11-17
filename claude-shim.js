@@ -68,7 +68,7 @@
     if (!who) return;
     const a = document.createElement("a");
     a.href = "/logout"; a.textContent = "Đăng xuất";
-    a.style.cssText = "color:var(--hdr-muted);font-size:12.5px;margin-left:10px;white-space:nowrap";
+    a.style.cssText = "color:var(--hdr-muted);font-size:13px;font-weight:600;margin-left:4px;white-space:nowrap";
     who.appendChild(a);
   });
 })();

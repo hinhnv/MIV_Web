@@ -29,6 +29,19 @@ CRIT = [
      ["Kết quả kêu gọi vốn đầu tư cho sản phẩm.", "Khả năng kêu gọi vốn đầu tư, sức hấp dẫn của sản phẩm đối với thị trường và nhà đầu tư."]),
 ]
 
+# Thang tham chieu AI dung khi cham (scoring_guide), hien cho giam khao de doi chieu. [tu, den, mo ta]
+ANCHORS = {
+    1: [[17, 20, "Mới thật sự ở VN, khác biệt rõ với giải pháp quốc tế, có so sánh đối thủ"], [13, 16, "Khác biệt rõ trong phân khúc tại VN, đúng xu hướng"], [9, 12, "Tương tự nhiều sản phẩm đã có, khác biệt nhỏ"], [0, 8, "Sao chép / phổ thông"]],
+    2: [[17, 20, "Công nghệ lõi tự phát triển, có bằng chứng chất lượng (ISO, chứng nhận ATTT, kiểm thử, benchmark, kiến trúc chi tiết)"], [13, 16, "Công nghệ tốt, mô tả kỹ thuật cụ thể, có một phần bằng chứng"], [9, 12, "Chỉ mô tả chung, chưa có bằng chứng chất lượng / bảo mật"], [0, 8, "Sơ sài"]],
+    3: [[9, 10, "Có văn bằng SHTT / GCN bản quyền phần mềm hoặc hợp đồng KH&CN; đội ngũ VN làm phần lõi"], [7, 8, "Đã nộp đơn SHTT, hoặc thuyết minh kỹ thuật chi tiết chứng tỏ đội VN làm lõi"], [5, 6, "Chỉ tuyên bố, không có chứng nhận"], [0, 4, "Lõi phụ thuộc nước ngoài hoặc không rõ"]],
+    4: [[9, 10, "Tính năng phong phú, có bằng chứng hài lòng người dùng, API / tích hợp, mở rộng và tùy biến rõ"], [7, 8, "Tốt nhưng ít bằng chứng hài lòng"], [5, 6, "Cơ bản"], [0, 4, "Hạn chế"]],
+    5: [[9, 10, "Bài toán lớn, cấp bách ở VN, được lượng hóa (số liệu, chính sách)"], [7, 8, "Rõ ràng, có ý nghĩa"], [5, 6, "Có ích nhưng không cấp thiết"], [0, 4, "Mơ hồ"]],
+    6: [[13, 15, "Đã có lực kéo thị trường rõ, mô hình và chiến lược cụ thể, TAM/SAM/SOM hợp lý"], [10, 12, "Mô hình rõ, có khách hàng ban đầu"], [7, 9, "Có kế hoạch nhưng ít lực kéo"], [0, 6, "Chưa rõ"]],
+    7: [[5, 5, "Doanh thu đáng kể, nhiều người dùng / tổ chức, có số liệu"], [4, 4, "Có doanh thu và người dùng ổn"], [3, 3, "Lực kéo ban đầu"], [2, 2, "Mới thí điểm"], [0, 1, "Chưa có"]],
+    8: [[5, 5, "Đã có khách hàng / doanh thu nước ngoài"], [4, 4, "Kế hoạch cụ thể, có thí điểm / đối tác nước ngoài"], [3, 3, "Có kế hoạch rõ"], [2, 2, "Chỉ nêu định hướng"], [0, 1, "Không đề cập"]],
+    9: [[5, 5, "Đã gọi được vốn đáng kể từ quỹ / tổ chức (có tên, số tiền)"], [4, 4, "Đã nhận vốn thiên thần / seed / ươm tạo, hoặc tập đoàn lớn hậu thuẫn"], [3, 3, "Hấp dẫn, đang đàm phán, có kế hoạch gọi vốn cụ thể"], [2, 2, "Tự thân, có tiềm năng"], [0, 1, "Không có thông tin"]],
+}
+
 products = []
 for p in info["san_pham"]:
     sc = json.loads((scores_dir / f"{p['stt']:02d}.json").read_text(encoding="utf-8"))
@@ -58,7 +71,7 @@ for p in info["san_pham"]:
 
 data = {
     "meta": {"scoredAt": "17/11/2026", "category": "Sản phẩm công nghệ số tiềm năng", "n": len(products)},
-    "criteria": [{"tt": t, "name": n, "short": s, "max": m, "group": g, "sub": sub} for t, n, s, m, g, sub in CRIT],
+    "criteria": [{"tt": t, "name": n, "short": s, "max": m, "group": g, "sub": sub, "anchors": ANCHORS[t]} for t, n, s, m, g, sub in CRIT],
     "grades": [[85, "Xuất sắc"], [75, "Tốt"], [65, "Khá"], [50, "Trung bình"], [0, "Yếu"]],
     "products": products,
 }
