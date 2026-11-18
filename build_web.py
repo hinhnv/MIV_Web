@@ -1,11 +1,20 @@
 """Gop du lieu san pham + diem AI vao template HTML -> trang Artifact.
-Usage: python -P -E -X utf8 build_web.py <E:\\MIV2026> <scores_dir> <template.html> <out.html>
+Usage: python -P -E -X utf8 build_web.py <E:\\MIV2026> <scores_dir> <template.html> <out.html> [metrics_dir]
+metrics_dir (mac dinh <root>/_nguong_dinh_luong): so lieu da trich cho bo nguong v3; thieu thi trang van chay, chi khong co goi y.
 """
 import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from v3_nguong import V3, RULES, suggest, facts  # noqa: E402
+
 root, scores_dir, tpl, out = (Path(a) for a in sys.argv[1:5])
+metrics_dir = Path(sys.argv[5]) if len(sys.argv) > 5 else root / "_nguong_dinh_luong"
+METRICS = {}
+for f in (sorted(metrics_dir.glob("metrics_*.json")) if metrics_dir.is_dir() else []):
+    for r in json.loads(f.read_text(encoding="utf-8")):
+        METRICS[r["stt"]] = r
 info = json.loads((root / "MIV2026_tong_hop.json").read_text(encoding="utf-8"))
 
 CRIT = [
@@ -68,14 +77,18 @@ for p in info["san_pham"]:
             "conf": (sc.get("do_tin_cay", "") or "").split(" ")[0].replace("Trung", "Trung bình"),
         },
     })
+    m = METRICS.get(p["stt"])
+    if m:
+        products[-1]["q"] = {"f": facts(m), "s": {str(t): v for t, v in suggest(m).items()}, "n": m.get("ghi_chu", "")}
 
 data = {
     "meta": {"scoredAt": "17/11/2026", "category": "Sản phẩm công nghệ số tiềm năng", "n": len(products)},
     "criteria": [{"tt": t, "name": n, "short": s, "max": m, "group": g, "sub": sub, "anchors": ANCHORS[t]} for t, n, s, m, g, sub in CRIT],
     "grades": [[85, "Xuất sắc"], [75, "Tốt"], [65, "Khá"], [50, "Trung bình"], [0, "Yếu"]],
     "products": products,
+    "v3": {"parts": {str(t): v for t, v in V3.items()}, "rules": RULES},
 }
 payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 html = tpl.read_text(encoding="utf-8").replace("__MIV_DATA__", payload)
 out.write_text(html, encoding="utf-8")
-print("written", out, "bytes", len(html.encode("utf-8")), "products", len(products))
+print("metrics", len(METRICS), "written", out, "bytes", len(html.encode("utf-8")), "products", len(products))

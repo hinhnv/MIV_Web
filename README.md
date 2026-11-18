@@ -17,6 +17,7 @@ Trình duyệt ──HTTPS──> Cloudflare ──tunnel──> cloudflared (co
 | `deploy.sh` | Script triển khai/cập nhật một lệnh. |
 | `.env.example` | Mẫu file `.env` (token tunnel, cổng). File `.env` thật **không** vào git. |
 | `template.html`, `build_web.py` | Nguồn để build lại trang khi dữ liệu thay đổi (cần thư mục dữ liệu `E:\MIV2026` trên máy gốc). |
+| `v3_nguong.py` | Bộ ngưỡng định lượng v3 (thành phần, mốc điểm, quy tắc) và cách tính gợi ý từ số liệu đã trích (`E:\MIV2026\_nguong_dinh_luong\metrics_*.json`). |
 
 ## Cách chấm (gửi giám khảo)
 
@@ -29,7 +30,8 @@ Mã màu cố định trên mọi trang: **tím** = điểm AI · **cam** = đi�
 3. Dải **9 tiêu chí** ở đầu phiếu chấm luôn hiện khi cuộn: xem nhanh điểm từng tiêu chí, bấm để nhảy tới.
 4. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
 5. Bấm nút xanh lá **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
-6. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
+6. **Ngưỡng v3** (tùy chọn): ở mỗi tiêu chí bấm nút *Ngưỡng v3* để chấm theo từng thành phần. Ô viền đứt là gợi ý từ số liệu AI trích (cần xác minh); bấm *Dùng … làm điểm tiêu chí* để lấy tổng làm điểm. Tab *Số liệu* ở cột phải liệt kê số liệu đã trích; trang *Ngưỡng v3* có quy tắc và mốc đầy đủ. Lưu ý: tổng theo v3 thường thấp hơn điểm AI khoảng 20 điểm, hội đồng thống nhất cách dùng trước.
+7. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
 
 ## Điều kiện
 

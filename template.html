@@ -385,6 +385,32 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
 .mut{color:var(--muted)}.small{font-size:12.5px}
 .row-flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
+/* ---------- bộ ngưỡng v3 ---------- */
+.v3b{border-color:var(--brand-soft);color:var(--brand-ink);background:var(--brand-soft2)}
+.v3{border:1.5px solid var(--brand-soft);background:#fbfcff;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.v3h{display:flex;flex-direction:column;gap:2px}
+.v3h b{color:var(--brand-ink)}
+.v3f{display:grid;grid-template-columns:minmax(120px,max-content) minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px;background:#fff;border:1px solid var(--line2);border-radius:9px;padding:8px 11px}
+.v3f dt{color:var(--muted);font-weight:600}.v3f dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.v3p{display:grid;grid-template-columns:minmax(150px,220px) auto minmax(0,1fr);gap:6px 12px;align-items:center;border-top:1px solid var(--line2);padding-top:8px}
+.v3l{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;font-size:13px}
+.v3k{display:flex;gap:4px;flex-wrap:wrap}
+.v3k button{min-width:30px;height:30px;padding:0 4px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+.v3k button:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft2)}
+.v3k button.sg{border-style:dashed;border-color:var(--brand-fill);color:var(--brand-ink)}
+.v3k button.on,.v3k button.on:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#fff;border-style:solid}
+.v3k button:disabled{cursor:not-allowed;opacity:.6}
+.v3d{font-size:12.5px;color:var(--fg);min-width:0}
+.sgl{font-size:11px;font-weight:800;color:var(--brand-ink);background:var(--brand-soft);border-radius:5px;padding:0 5px}
+.v3s{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:10px}
+.v3s b{font-family:var(--f-disp);font-size:18px;color:var(--brand-ink)}
+.tt{font-size:10.5px;font-weight:800;border-radius:5px;padding:1px 6px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+.t-DL{background:var(--sky-soft);color:var(--sky)}.t-BC{background:#fdf2f8;color:#9d174d}.t-CM{background:#e9eef5;color:#334155}
+table.bt3{border-collapse:collapse;font-size:13px;width:100%;margin:4px 0}
+.bt3 td{padding:4px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+.bt3 td:first-child{white-space:nowrap;font-weight:800;width:52px;color:var(--brand-ink)}
+.rules{margin:0;padding-left:20px;font-size:14px}.rules li{margin-bottom:6px}
+
 @media (max-width:1280px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:1100px){
   .work{grid-template-columns:minmax(0,1fr)}
@@ -404,6 +430,7 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
   .pnav .row-flex{flex-wrap:wrap}
   .pnav select{flex:1;max-width:none}
   .cstrip{position:static;flex-wrap:wrap}
+  .v3p{grid-template-columns:minmax(0,1fr)}
   .picker button{min-width:44px;height:44px}
   .progcard{grid-template-columns:auto minmax(0,1fr)}
   .progcard .stchips{grid-column:1/-1}
@@ -440,6 +467,7 @@ details.anch .src{font-size:11.5px;color:var(--faint);margin-top:4px}
       <a href="#xep-hang" data-r="xep-hang"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Xếp hạng</a>
       <a href="#gop-y" data-r="gop-y"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Góp ý</a>
       <a href="#tieu-chi" data-r="tieu-chi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Tiêu chí</a>
+      <a href="#nguong" data-r="nguong"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2M10 10l2 2M13 7l2 2"/></svg>Ngưỡng v3</a>
       <a href="#xuat-du-lieu" data-r="xuat-du-lieu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Xuất dữ liệu</a>
     </div>
     <div class="prog" id="side-prog"></div>
@@ -463,7 +491,7 @@ const main = $("#main");
 const S = {
   route: "tong-quan", q: "", terms: [], hlOn: true,
   sort: { key: "stt", dir: 1 }, f: { text: "", grade: "" }, ttab: "all", showTC: false,
-  basis: "ai", cmFilter: "", tab: "hoso", openR: {}, openCm: {},
+  basis: "ai", cmFilter: "", tab: "hoso", openR: {}, openCm: {}, openV3: {},
   mode: "local", canWrite: false, dbReady: false, myId: null, meName: "", meAvatar: "",
   judges: {}, mine: null, profiles: {}, drafts: {}, savedAt: null,
   db: null, user: null, dl: null, dragging: false, pendingRender: false,
@@ -538,7 +566,7 @@ function matchInfo(p) {
 }
 
 /* ---------- scoring model (giữ nguyên cấu trúc dữ liệu cũ) ---------- */
-const emptyDoc = () => ({ scores: {}, notes: {}, confirmed: {}, comments: [], updatedAt: null });
+const emptyDoc = () => ({ scores: {}, notes: {}, confirmed: {}, comments: [], parts: {}, updatedAt: null });
 function judgeDocs() { const j = Object.assign({}, S.judges); if (S.myId && S.mine) j[S.myId] = S.mine; return j; }
 function own(doc, stt, tt) { const v = doc && doc.scores && doc.scores[stt] ? doc.scores[stt][tt] : null; return typeof v === "number" ? v : null; }
 function eff(doc, p, i) { const v = own(doc, p.stt, i + 1); return v == null ? p.ai.s[i] : v; }
@@ -603,6 +631,39 @@ function pmap() {
   const nx = S.canWrite ? nextTodo(0) : null;
   return P.map(p => { const st = status(p.stt); const lb = p.stt + ". " + p.name + " · " + ST[st][0];
     return `<a class="cell c-${st} ${nx && nx.stt === p.stt ? "nx" : ""}" href="#sp-${p.stt}" title="${esc(lb)}" aria-label="${esc("Sản phẩm " + lb)}">${p.stt}</a>`; }).join("");
+}
+
+/* ---------- bộ ngưỡng v3 ---------- */
+const V3 = D.v3 || null;
+const TLAB = { DL: "Số liệu", BC: "Bằng chứng", CM: "Chuyên môn" };
+const v3parts = tt => (V3 && V3.parts[tt] ? V3.parts[tt].parts : []);
+const myParts = (stt, tt) => (S.mine && S.mine.parts && S.mine.parts[stt] && S.mine.parts[stt][tt]) || {};
+const bandOf = (part, v) => (part.b || []).find(([lo, hi]) => v >= lo && v <= hi);
+function v3sum(stt, tt) {
+  const ps = v3parts(tt), mp = myParts(stt, tt); let s = 0, n = 0;
+  ps.forEach(part => { if (typeof mp[part.k] === "number") { s += mp[part.k]; n++; } });
+  const cap = Math.min((V3 && V3.parts[tt] && V3.parts[tt].cap) || 999, C[tt - 1].max);
+  return { s: Math.min(s, cap), n, of: ps.length };
+}
+function v3panel(p, c) {
+  const stt = p.stt, tt = c.tt, ps = v3parts(tt); if (!ps.length) return "";
+  const mp = myParts(stt, tt), sg = (p.q && p.q.s && p.q.s[tt]) || {}, fs = (p.q && p.q.f && p.q.f[tt]) || [];
+  const sm = v3sum(stt, tt), dis = S.canWrite ? "" : "disabled";
+  const rows = ps.map(part => {
+    const cur = typeof mp[part.k] === "number" ? mp[part.k] : null, sv = typeof sg[part.k] === "number" ? sg[part.k] : null;
+    const shown = cur != null ? cur : sv, bd = shown != null ? bandOf(part, shown) : null;
+    return `<div class="v3p"><div class="v3l"><b>${esc(part.k)}. ${esc(part.l)}</b><span class="tt t-${part.t}">${TLAB[part.t]}</span><span class="mut">/${part.m}</span></div>
+      <div class="v3k" role="group" aria-label="${esc(part.l)}">${Array.from({ length: part.m + 1 }, (_, v) => `<button class="${v === cur ? "on" : ""} ${v === sv ? "sg" : ""}" aria-pressed="${v === cur}" data-act="v3pick" data-stt="${stt}" data-tt="${tt}" data-k="${esc(part.k)}" data-v="${v}" ${dis} title="${esc((bandOf(part, v) || [0, 0, ""])[2])}${v === sv ? " (gợi ý)" : ""}">${v}</button>`).join("")}</div>
+      <div class="v3d">${bd ? `${cur == null ? `<span class="sgl">Gợi ý</span> ` : ""}${esc(bd[2])}` : `<span class="mut">Chưa chọn</span>`}${part.n ? `<div class="mut small">${esc(part.n)}</div>` : ""}</div></div>`;
+  }).join("");
+  const hasSg = ps.some(part => typeof sg[part.k] === "number" && typeof mp[part.k] !== "number");
+  return `<div class="v3">
+    <div class="v3h"><b>Chấm theo bộ ngưỡng v3</b><span class="small mut">Chọn điểm từng thành phần (bấm lại để bỏ chọn). Ô viền đứt là gợi ý từ số liệu AI trích, đã áp trần tự khai: cần xác minh trước khi dùng.</span></div>
+    ${fs.length ? `<dl class="v3f">${fs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${hl(v)}</dd>`).join("")}</dl>` : ""}
+    ${rows}
+    <div class="v3s"><span>Tổng v3: <b class="num">${sm.s}</b>/${c.max} <span class="mut small">(đã chọn ${sm.n}/${sm.of} thành phần)</span></span>
+      <span class="row-flex" style="gap:6px">${hasSg ? `<button class="btn sm" data-act="v3fill" data-stt="${stt}" data-tt="${tt}" ${dis}>Điền gợi ý</button>` : ""}${sm.n ? `<button class="btn sm ghost" data-act="v3clear" data-stt="${stt}" data-tt="${tt}" ${dis}>Xóa</button>` : ""}<button class="btn sm pri" data-act="v3apply" data-stt="${stt}" data-tt="${tt}" ${dis || (sm.n ? "" : "disabled")}>Dùng ${sm.s} làm điểm tiêu chí</button></span></div>
+  </div>`;
 }
 
 /* ---------- Tổng quan ---------- */
@@ -748,9 +809,11 @@ function critRow(p, c, i) {
     <div class="reason"><span class="lb">Lý do AI chấm ${a}/${c.max}</span><div class="txt ${open ? "" : "clamp"}">${rich(p.ai.r[i])}</div><button class="linkbtn" data-act="toggleR" data-k="${rk}">${open ? "Thu gọn" : "Xem đầy đủ"}</button></div>
     <div class="c-foot">
       <button class="btn sm" data-act="toggleCm" data-k="${rk}" aria-expanded="${!!cmOpen}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Góp ý${th.length ? ` (${th.length})` : ""}</button>
+      ${V3 && v3parts(tt).length ? (() => { const sm = v3sum(stt, tt); return `<button class="btn sm v3b" data-act="toggleV3" data-k="${rk}" aria-expanded="${!!S.openV3[rk]}">Ngưỡng v3${sm.n ? ` · ${sm.s}/${c.max}` : ""}</button>`; })() : ""}
       <details class="anch"><summary>Thang tham chiếu</summary><table>${(c.anchors || []).map(([lo, hi, t]) => `<tr class="${shown >= lo && shown <= hi ? "cur" : ""}"><td>${lo === hi ? lo : lo + "–" + hi}</td><td>${esc(t)}</td></tr>`).join("")}</table><div class="src">Thang AI dùng khi chấm sơ bộ; tiêu chí thành phần theo thể lệ: ${esc(c.sub.join(" "))}</div></details>
       ${others.length ? `<div class="chips">${others.map(id => `<span class="chip">${av(id)}${esc(person(id).name)}: <b>${eff(CALC.J[id], p, i)}</b></span>`).join("")}</div>` : ""}
     </div>
+    ${S.openV3[rk] ? v3panel(p, c) : ""}
     ${cmOpen || th.length && S.terms.length ? `<div class="thread">${th.map(x => cmItem(x, false)).join("")}${S.canWrite ? `<div class="compose"><textarea id="cm-${stt}-${tt}" rows="1" placeholder="Góp ý cho tiêu chí ${tt}… (Ctrl+Enter để gửi)">${esc(S.drafts["cm-" + stt + "-" + tt] || "")}</textarea><button class="btn pri" data-act="addcm" data-stt="${stt}" data-tt="${tt}">Gửi</button></div>` : ""}</div>` : ""}
   </div>`;
 }
@@ -766,7 +829,7 @@ function vProduct(stt) {
   const allIds = CALC.ids.filter(id => scored(CALC.J[id], stt));
   const note = (S.mine && S.mine.notes && S.mine.notes[stt]) || "";
   const delta = r.mine - r.ai;
-  const tabs = [["hoso", "Hồ sơ", p.files.length], ["ai", "Nhận xét AI", 0], ["gk", "Giám khảo", allIds.length], ["gopy", "Góp ý", cmsP.length], ["note", "Ghi chú", note ? "✓" : 0]];
+  const tabs = [["hoso", "Hồ sơ", p.files.length], ["ai", "Nhận xét AI", 0], ...(p.q ? [["solieu", "Số liệu", 0]] : []), ["gk", "Giám khảo", allIds.length], ["gopy", "Góp ý", cmsP.length], ["note", "Ghi chú", note ? "✓" : 0]];
   let tb = "";
   if (S.tab === "ai") {
     tb = `<div class="sec"><h3 class="h-ai">Tổng hợp</h3><div class="prose">${rich(p.ai.summary)}</div>
@@ -779,6 +842,9 @@ function vProduct(stt) {
   } else if (S.tab === "gk") {
     tb = allIds.length ? `<div class="tbl-wrap"><table class="t" style="font-size:13px"><thead><tr><th>Giám khảo</th>${C.map(c => `<th class="c" title="${esc(c.name)}">${c.tt}</th>`).join("")}<th class="c">Tổng</th></tr></thead><tbody>${allIds.map(id => { const dd = CALC.J[id]; return `<tr style="cursor:default"><td><span class="row-flex" style="gap:6px;flex-wrap:nowrap">${av(id, 22)}<span>${esc(person(id).name)}${dd.confirmed && dd.confirmed[stt] ? ` <span style="color:var(--good);font-weight:800">✓</span>` : ""}</span></span></td>${C.map((c, i) => { const v = eff(dd, p, i); return `<td class="c num"><span class="sc ${v !== p.ai.s[i] ? "chg" : ""}"><b>${v}</b></span></td>`; }).join("")}<td class="c"><span class="tot hd">${jTotal(dd, p)}</span></td></tr>`; }).join("")}<tr style="cursor:default"><td><b class="t-ai">AI</b></td>${p.ai.s.map(v => `<td class="c num t-ai">${v}</td>`).join("")}<td class="c"><span class="tot ai">${r.ai}</span></td></tr></tbody></table></div>
       ${allIds.map(id => (CALC.J[id].notes || {})[stt] ? `<div class="cm" style="margin-top:12px">${av(id)}<div><div class="h"><b>${esc(person(id).name)}</b><span class="tag">Ghi chú</span></div><div class="x">${hl(CALC.J[id].notes[stt])}</div></div></div>` : "").join("")}` : `<div class="empty">Chưa có giám khảo nào chấm sản phẩm này.</div>`;
+  } else if (S.tab === "solieu" && p.q) {
+    const q = p.q;
+    tb = `<div class="sec">${q.n ? `<h3 class="h-warn">Ghi chú khi trích số liệu</h3><div class="warnbox">${hl(q.n)}</div>` : ""}${C.map(c => (q.f[c.tt] || []).length ? `<h3>TC${c.tt}. ${esc(c.short)}</h3><dl class="kv">${q.f[c.tt].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${hl(v)}</dd>`).join("")}</dl>` : "").join("")}<p class="small mut" style="margin-top:14px">Số liệu do AI trích từ lý do chấm và thông tin đăng ký, chưa có số trang; mức kiểm chứng (K/T) phải xác định lại theo quy tắc v3 khi xác minh hồ sơ.</p></div>`;
   } else if (S.tab === "note") {
     tb = `<div class="sec"><h3>Ghi chú của tôi</h3><p class="small mut" style="margin:0 0 8px">Ghi chú riêng cho sản phẩm này; giám khảo khác xem được ở tab Giám khảo.</p><textarea id="note-${stt}" class="inp" rows="7" placeholder="Ghi chú cho sản phẩm này…" ${S.canWrite ? "" : "readonly"}>${esc(S.drafts["note-" + stt] != null ? S.drafts["note-" + stt] : note)}</textarea><div class="row-flex" style="margin-top:8px;justify-content:flex-end"><button class="btn pri sm" data-act="savenote" data-stt="${stt}" ${dis}>Lưu ghi chú</button></div></div>`;
   } else if (S.tab === "gopy") {
@@ -862,6 +928,15 @@ function vCriteria() {
     <div class="tbl-wrap card"><table class="t"><thead><tr><th class="c">TT</th><th>Tiêu chí &amp; tiêu chí thành phần</th><th>Thang tham chiếu</th><th class="c">Điểm</th><th class="c">TB AI</th></tr></thead><tbody>${rows}<tr style="cursor:default"><td></td><td colspan="2"><b>TỔNG</b></td><td class="c"><b>100</b></td><td></td></tr></tbody></table></div>
     <section class="card"><h2>Xếp loại theo tổng điểm <small>ngưỡng đề xuất, không có trong thể lệ</small></h2><div class="body row-flex">${D.grades.slice().reverse().map(([t, l], i, arr) => `<span class="pill ${GCLS[l]}">${l}: ${t}${i < arr.length - 1 ? "–" + (arr[i + 1][0] - 1) : "+"}</span>`).join("")}</div></section></div>`;
 }
+function vNguong() {
+  if (!V3) return `<div class="wrap"><div class="empty">Trang này chưa có bộ ngưỡng v3.</div></div>`;
+  const crit = C.map(c => { const ps = v3parts(c.tt); const cap = V3.parts[c.tt] && V3.parts[c.tt].cap;
+    return `<section class="card"><h2>TC${c.tt}. ${esc(c.name)} <small>${c.max} điểm = ${ps.map(x => x.k + " " + x.m).join(" + ")}${cap ? " (tổng tối đa " + cap + ")" : ""}</small></h2><div class="body">${ps.map(x => `<div style="margin-bottom:12px"><div class="v3l" style="margin-bottom:4px"><b>${esc(x.k)}. ${esc(x.l)}</b><span class="tt t-${x.t}">${TLAB[x.t]}</span><span class="mut">/${x.m}</span></div><table class="bt3">${x.b.map(([lo, hi, t]) => `<tr><td>${lo === hi ? lo : lo + "–" + hi}</td><td>${hl(t)}</td></tr>`).join("")}</table>${x.n ? `<div class="small mut">${hl(x.n)}</div>` : ""}</div>`).join("")}</div></section>`; }).join("");
+  return `<div class="wrap"><div class="pagehead"><div><h1>Bộ ngưỡng định lượng v3</h1><p>Bản rút gọn để chấm. Bản đầy đủ (căn cứ, quy trình hiệu chuẩn, lưu ý cho Ban tổ chức) do thư ký giữ.</p></div></div>
+    <div class="banner"><b>Lưu ý thang điểm.</b> Chấm theo v3 cho tổng thấp hơn điểm AI khoảng 20 điểm (trung vị mô phỏng khoảng 40 so với 63), nên ngưỡng xếp loại hiện tại (85/75/65/50) không áp dụng cho điểm theo v3. Hội đồng thống nhất cách dùng trước khi chấm.</div>
+    <section class="card acc-warn"><h2>Quy tắc chung</h2><div class="body"><ol class="rules">${V3.rules.map(x => `<li>${hl(x)}</li>`).join("")}</ol><p class="small mut" style="margin:10px 0 0">Loại thành phần: <span class="tt t-DL">Số liệu</span> tra bảng từ số liệu · <span class="tt t-BC">Bằng chứng</span> xếp bậc theo mức bằng chứng · <span class="tt t-CM">Chuyên môn</span> giám khảo đánh giá theo mốc neo. Trong trang chấm, mở nút "Ngưỡng v3" ở từng tiêu chí để chọn điểm thành phần.</p></div></section>
+    <div class="grid g2">${crit}</div></div>`;
+}
 function vExport() {
   const ok = !!S.dl;
   const card = (t, d, btns, cls, ic) => `<section class="card xcard"><div class="body"><span class="ki k-${cls}">${ic}</span><h3>${t}</h3><p>${d}</p><div class="row-flex">${btns}</div></div></section>`;
@@ -873,7 +948,7 @@ function vExport() {
 }
 
 /* ---------- render ---------- */
-const ROUTES = ["tong-quan", "bang-diem", "xep-hang", "gop-y", "tieu-chi", "xuat-du-lieu"];
+const ROUTES = ["tong-quan", "bang-diem", "xep-hang", "gop-y", "tieu-chi", "nguong", "xuat-du-lieu"];
 function parseRoute() { const h = (location.hash || "").replace(/^#/, ""); if (/^sp-\d+$/.test(h) && byStt.has(+h.slice(3))) return h; return ROUTES.includes(h) ? h : "tong-quan"; }
 function render() {
   if (S.dragging) { S.pendingRender = true; return; }
@@ -881,7 +956,7 @@ function render() {
   const ae = document.activeElement; const fid = ae && ae.id && main.contains(ae) ? ae.id : null; let ss = null, se = null;
   if (fid) { try { ss = ae.selectionStart; se = ae.selectionEnd; } catch (e) { } }
   const r = S.route;
-  main.innerHTML = r.startsWith("sp-") ? vProduct(+r.slice(3)) : r === "bang-diem" ? vTable() : r === "xep-hang" ? vRank() : r === "gop-y" ? vComments() : r === "tieu-chi" ? vCriteria() : r === "xuat-du-lieu" ? vExport() : vDashboard();
+  main.innerHTML = r.startsWith("sp-") ? vProduct(+r.slice(3)) : r === "bang-diem" ? vTable() : r === "xep-hang" ? vRank() : r === "gop-y" ? vComments() : r === "tieu-chi" ? vCriteria() : r === "xuat-du-lieu" ? vExport() : r === "nguong" ? vNguong() : vDashboard();
   main.classList.toggle("has-mbar", r.startsWith("sp-"));
   document.querySelectorAll("#side a").forEach(a => { const on = a.dataset.r === (r.startsWith("sp-") ? "bang-diem" : r); a.classList.toggle("on", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   if (fid) { const el = document.getElementById(fid); if (el) { el.focus({ preventScroll: true }); try { if (ss != null) el.setSelectionRange(ss, se); } catch (e) { } } }
@@ -957,6 +1032,7 @@ document.addEventListener("click", e => {
   if (a === "tc") { S.showTC = t.checked; render(); return; }
   if (a === "tab") { S.tab = t.dataset.v; render(); return; }
   if (a === "jump") { const el = document.getElementById("crit-" + t.dataset.tt); if (el) { el.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); const f = el.querySelector(".picker button.on, input.rg"); if (f) f.focus({ preventScroll: true }); } return; }
+  if (a === "toggleV3") { S.openV3[t.dataset.k] = !S.openV3[t.dataset.k]; render(); return; }
   if (a === "toggleR") { S.openR[t.dataset.k] = !S.openR[t.dataset.k]; render(); return; }
   if (a === "toggleCm") { S.openCm[t.dataset.k] = !S.openCm[t.dataset.k]; render(); if (S.openCm[t.dataset.k]) { const ta = document.getElementById("cm-" + t.dataset.k); if (ta) ta.focus(); } return; }
   if (a === "exp") { doExport(t.dataset.v); return; }
@@ -965,6 +1041,13 @@ document.addEventListener("click", e => {
   if (a === "pick") setScore(stt, tt, +t.dataset.v);
   else if (a === "step") { const cur = S.drafts["sc-" + stt + "-" + tt] != null ? +S.drafts["sc-" + stt + "-" + tt] : (own(S.mine, stt, tt) == null ? p.ai.s[tt - 1] : own(S.mine, stt, tt)); setScore(stt, tt, cur + (+t.dataset.d)); }
   else if (a === "reset") setScore(stt, tt, null);
+  else if (a === "v3pick" || a === "v3fill") {
+    const all = (S.mine.parts = S.mine.parts || {}); const o = (all[stt] = all[stt] || {}); const q = (o[tt] = o[tt] || {});
+    if (a === "v3pick") { const k = t.dataset.k, v = +t.dataset.v; if (q[k] === v) delete q[k]; else q[k] = v; touch(false); }
+    else { const sg = (p.q && p.q.s && p.q.s[tt]) || {}; let n = 0; for (const [k, v] of Object.entries(sg)) if (typeof q[k] !== "number") { q[k] = v; n++; } touch(false); toast("Đã điền " + n + " gợi ý cho TC" + tt + ", nhớ xác minh lại."); }
+  }
+  else if (a === "v3clear") { if (S.mine.parts && S.mine.parts[stt]) delete S.mine.parts[stt][tt]; touch(false); }
+  else if (a === "v3apply") { const sm = v3sum(stt, tt); setScore(stt, tt, sm.s); toast("TC" + tt + ": dùng tổng v3 = " + sm.s + "/" + C[tt - 1].max); }
   else if (a === "allai") { S.mine.scores[stt] = {}; C.forEach(c => delete S.drafts["sc-" + stt + "-" + c.tt]); touch(true); toast("Đã đặt lại 9 tiêu chí theo điểm AI"); }
   else if (a === "confirm" || a === "confirmnext") { S.mine.confirmed[stt] = true; touch(true); toast("Đã xác nhận điểm sản phẩm " + stt + ": " + jTotal(S.mine, p) + "/100"); if (a === "confirmnext") goNextTodo(stt); }
   else if (a === "unconfirm") { delete S.mine.confirmed[stt]; touch(true); toast("Đã bỏ xác nhận sản phẩm " + stt); }
@@ -1010,7 +1093,7 @@ let qT;
 $("#q").addEventListener("input", e => {
   clearTimeout(qT); qT = setTimeout(() => {
     S.q = e.target.value; S.terms = fold(S.q).split(/\s+/).filter(t => t.length >= 2); markIx = -1;
-    if (S.terms.length && ["tong-quan", "tieu-chi", "xuat-du-lieu", "xep-hang"].includes(S.route)) location.hash = "bang-diem"; else render();
+    if (S.terms.length && ["tong-quan", "tieu-chi", "nguong", "xuat-du-lieu", "xep-hang"].includes(S.route)) location.hash = "bang-diem"; else render();
   }, 180);
 });
 $("#hl").addEventListener("change", e => { S.hlOn = e.target.checked; render(); });
@@ -1049,6 +1132,9 @@ async function doExport(kind) {
     const r4 = [["Thời gian", "Giám khảo", "STT", "Tên sản phẩm", "Tiêu chí", "Nội dung"]];
     CALC.cms.slice().reverse().forEach(c => r4.push([fmtT(c.at), names[c.by] || "", c.stt, byStt.get(c.stt).name, c.tt ? "TC" + c.tt + ". " + C[c.tt - 1].short : "Góp ý chung", c.text]));
     const s4 = X.utils.aoa_to_sheet(r4); s4["!cols"] = [{ wch: 14 }, { wch: 22 }, { wch: 5 }, { wch: 34 }, { wch: 22 }, { wch: 100 }]; X.utils.book_append_sheet(wb, s4, "Góp ý");
+    const r5 = [["STT", "Tên sản phẩm", "TC", "Thành phần", "Loại", "Điểm", "Tối đa", "Tổng v3 của TC"]];
+    P.forEach(p => C.forEach(c => { const mp = myParts(p.stt, c.tt); const ps = v3parts(c.tt).filter(x => typeof mp[x.k] === "number"); if (!ps.length) return; const sm = v3sum(p.stt, c.tt); ps.forEach(x => r5.push([p.stt, p.name, c.tt, x.k + ". " + x.l, TLAB[x.t], mp[x.k], x.m, sm.s])); }));
+    if (r5.length > 1) X.utils.book_append_sheet(wb, X.utils.aoa_to_sheet(r5), "Ngưỡng v3 của tôi");
     return save("MIV2026_cham_diem_" + stamp + ".xlsx", new Blob([X.write(wb, { bookType: "xlsx", type: "array" })]));
   }
 }
@@ -1071,7 +1157,7 @@ async function boot() {
     const j = {}; snap.docs.forEach(d => { if (d.exists) j[d.id] = d.data(); }); S.judges = j;
     if (!snap.metadata.fromCache && !S.dbReady) { clearTimeout(timer); S.dbReady = true; S.mode = "live"; S.canWrite = writable; setSync(S.canWrite ? "ok" : "", S.canWrite ? "Đã đồng bộ" : "Chỉ xem"); }
     if (!dirty && !saving) S.mine = S.myId ? JSON.parse(JSON.stringify(j[S.myId] || emptyDoc())) : null;
-    if (S.mine) { S.mine.scores = S.mine.scores || {}; S.mine.notes = S.mine.notes || {}; S.mine.confirmed = S.mine.confirmed || {}; S.mine.comments = S.mine.comments || []; }
+    if (S.mine) { S.mine.scores = S.mine.scores || {}; S.mine.notes = S.mine.notes || {}; S.mine.confirmed = S.mine.confirmed || {}; S.mine.comments = S.mine.comments || []; S.mine.parts = S.mine.parts || {}; }
     render(); refreshProfiles();
   }, err => { clearTimeout(timer); S.mode = "stale"; S.canWrite = false; setSync("err", err && err.code === "revoked" ? "Mất quyền truy cập" : "Mất kết nối"); render(); });
 }
