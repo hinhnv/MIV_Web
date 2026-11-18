@@ -1208,10 +1208,8 @@ async function boot() {
     if (S.mine) { S.mine.scores = S.mine.scores || {}; S.mine.notes = S.mine.notes || {}; S.mine.confirmed = S.mine.confirmed || {}; S.mine.comments = S.mine.comments || []; S.mine.parts = S.mine.parts || {}; }
     if (S.mine && S.canWrite && AIV > 1 && S.mine.aiVer !== AIV && !dirty && !saving) {
       // diem AI mac dinh vua doi: chot diem AI cu vao nhung san pham ban da cham de diem cua ban khong doi
-      let n = 0;
-      for (const p of P) { const h = (p.ai.hist && p.ai.hist[String(S.mine.aiVer || 1)]) || p.ai.s0; if (h && scored(S.mine, p.stt)) { const sc = (S.mine.scores[p.stt] = S.mine.scores[p.stt] || {}); C.forEach((c, i) => { if (typeof sc[c.tt] !== "number") sc[c.tt] = h[i]; }); n++; } }
-      S.mine.aiVer = AIV; touch(true);
-      if (n) toast("Điểm AI mặc định đã cập nhật theo ngưỡng " + NV + ". Điểm bạn đã chấm ở " + n + " sản phẩm được giữ nguyên; bấm \"Đặt lại theo AI\" ở sản phẩm nào muốn dùng điểm mới.");
+      for (const p of P) { const h = (p.ai.hist && p.ai.hist[String(S.mine.aiVer || 1)]) || p.ai.s0; if (h && scored(S.mine, p.stt)) { const sc = (S.mine.scores[p.stt] = S.mine.scores[p.stt] || {}); C.forEach((c, i) => { if (typeof sc[c.tt] !== "number") sc[c.tt] = h[i]; }); } }
+      S.mine.aiVer = AIV; touch(true); // khong hien thong bao
     }
     render(); refreshProfiles();
   }, err => { clearTimeout(timer); S.mode = "stale"; S.canWrite = false; setSync("err", err && err.code === "revoked" ? "Mất quyền truy cập" : "Mất kết nối"); render(); });
