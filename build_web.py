@@ -51,10 +51,42 @@ ANCHORS = {
     9: [[5, 5, "Đã gọi được vốn đáng kể từ quỹ / tổ chức (có tên, số tiền)"], [4, 4, "Đã nhận vốn thiên thần / seed / ươm tạo, hoặc tập đoàn lớn hậu thuẫn"], [3, 3, "Hấp dẫn, đang đàm phán, có kế hoạch gọi vốn cụ thể"], [2, 2, "Tự thân, có tiềm năng"], [0, 1, "Không có thông tin"]],
 }
 
+# Diem AI cham lai theo bo nguong v3 (E:\MIV2026\_ai_cham_v3\NN.json). Chi dung khi du ca 55 file, tranh tron 2 thang diem.
+V3_DIR = root / "_ai_cham_v3"
+V3_AI = {}
+for p in info["san_pham"]:
+    f = V3_DIR / f"{p['stt']:02d}.json"
+    if f.exists():
+        V3_AI[p["stt"]] = json.loads(f.read_text(encoding="utf-8"))
+USE_V3 = len(V3_AI) == len(info["san_pham"])
+if V3_AI and not USE_V3:
+    print(f"CANH BAO: moi co {len(V3_AI)}/{len(info['san_pham'])} file v3, van dung diem AI cu")
+
+
+def v3_block(v):
+    """Rut gon ket qua v3 cua mot san pham cho trang: diem, thanh phan, ly do, bang chung, con thieu."""
+    tcs = sorted(v["tieu_chi"], key=lambda t: t["tt"])
+    blk = {str(t["tt"]): {"p": t["thanh_phan"], "w": t.get("ly_do_thanh_phan", {}),
+                          "e": [[e.get("noi_dung", ""), e.get("nguon", ""), e.get("muc", "")] for e in t.get("ho_so_co", [])],
+                          "m": t.get("con_thieu", "")} for t in tcs}
+    flat = []
+    for t in tcs:
+        ev = "; ".join(f"{e.get('noi_dung', '')} ({e.get('nguon', '')})" for e in t.get("ho_so_co", []))
+        why = "; ".join(f"{k} = {t['thanh_phan'].get(k)}: {w}" for k, w in t.get("ly_do_thanh_phan", {}).items())
+        flat.append(f"Hồ sơ đang có: {ev}. Cách cho điểm: {why}." + (f" Còn thiếu: {t['con_thieu']}" if t.get("con_thieu") else ""))
+    return [t["diem"] for t in tcs], flat, blk
+
+
 products = []
 for p in info["san_pham"]:
     sc = json.loads((scores_dir / f"{p['stt']:02d}.json").read_text(encoding="utf-8"))
     smap = {s["tt"]: s for s in sc["scores"]}
+    if USE_V3:
+        v = V3_AI[p["stt"]]
+        s_v3, r_v3, blk = v3_block(v)
+        sc_old = [smap[t]["diem"] for t in range(1, 10)]
+        smap = {t: {"diem": s_v3[t - 1], "ly_do": r_v3[t - 1]} for t in range(1, 10)}
+        sc = dict(sc, **{k: v[k] for k in ("nhan_xet_chung", "diem_manh", "diem_yeu", "can_xac_minh", "tai_lieu_da_doc", "han_che", "do_tin_cay") if k in v})
     fl = p["fields"]
     products.append({
         "stt": p["stt"], "id": p["id"], "name": p["ten_san_pham"], "company": p["doanh_nghiep"],
@@ -77,18 +109,29 @@ for p in info["san_pham"]:
             "conf": (sc.get("do_tin_cay", "") or "").split(" ")[0].replace("Trung", "Trung bình"),
         },
     })
+    if USE_V3:
+        products[-1]["ai"]["s0"] = sc_old   # diem AI thang cu: giu nguyen diem giam khao da cham truoc khi doi
+        products[-1]["ai"]["v3"] = blk
     m = METRICS.get(p["stt"])
     if m:
         products[-1]["q"] = {"f": facts(m), "s": {str(t): v for t, v in suggest(m).items()}, "n": m.get("ghi_chu", "")}
 
+GRADES = [[85, "Xuất sắc"], [75, "Tốt"], [65, "Khá"], [50, "Trung bình"], [0, "Yếu"]]
+if USE_V3:
+    # Xep loai TAM theo phan vi tong diem AI v3 (top ~10% / 30% / 60% / 85%); hoi dong chot lai sau khi cham.
+    tot = sorted(sum(p["ai"]["s"]) for p in products)
+    q = lambda f: tot[min(len(tot) - 1, int(round(f * (len(tot) - 1))))]
+    GRADES = [[q(0.90), "Xuất sắc"], [q(0.70), "Tốt"], [q(0.40), "Khá"], [q(0.15), "Trung bình"], [0, "Yếu"]]
+
 data = {
-    "meta": {"scoredAt": "17/11/2026", "category": "Sản phẩm công nghệ số tiềm năng", "n": len(products)},
+    "meta": {"scoredAt": "18/11/2026" if USE_V3 else "17/11/2026", "category": "Sản phẩm công nghệ số tiềm năng", "n": len(products),
+             "aiVer": 3 if USE_V3 else 1, "gradesTemp": USE_V3},
     "criteria": [{"tt": t, "name": n, "short": s, "max": m, "group": g, "sub": sub, "anchors": ANCHORS[t]} for t, n, s, m, g, sub in CRIT],
-    "grades": [[85, "Xuất sắc"], [75, "Tốt"], [65, "Khá"], [50, "Trung bình"], [0, "Yếu"]],
+    "grades": GRADES,
     "products": products,
     "v3": {"parts": {str(t): v for t, v in V3.items()}, "rules": RULES},
 }
 payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 html = tpl.read_text(encoding="utf-8").replace("__MIV_DATA__", payload)
 out.write_text(html, encoding="utf-8")
-print("metrics", len(METRICS), "written", out, "bytes", len(html.encode("utf-8")), "products", len(products))
+print("ai", "v3" if USE_V3 else "cu", "grades", GRADES, "metrics", len(METRICS), "written", out, "bytes", len(html.encode("utf-8")), "products", len(products))

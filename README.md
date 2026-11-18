@@ -18,6 +18,7 @@ Trình duyệt ──HTTPS──> Cloudflare ──tunnel──> cloudflared (co
 | `.env.example` | Mẫu file `.env` (token tunnel, cổng). File `.env` thật **không** vào git. |
 | `template.html`, `build_web.py` | Nguồn để build lại trang khi dữ liệu thay đổi (cần thư mục dữ liệu `E:\MIV2026` trên máy gốc). |
 | `v3_nguong.py` | Bộ ngưỡng định lượng v3 (thành phần, mốc điểm, quy tắc) và cách tính gợi ý từ số liệu đã trích (`E:\MIV2026\_nguong_dinh_luong\metrics_*.json`). |
+| `E:\MIV2026\_ai_cham_v3\` (ngoài repo) | Điểm AI chấm lại theo v3 cho 55 hồ sơ; `build_web.py` tự dùng khi đủ 55 file (xếp loại tạm theo phân vị). |
 
 ## Cách chấm (gửi giám khảo)
 
@@ -30,7 +31,7 @@ Mã màu cố định trên mọi trang: **tím** = điểm AI · **cam** = đi�
 3. Dải **9 tiêu chí** ở đầu phiếu chấm luôn hiện khi cuộn: xem nhanh điểm từng tiêu chí, bấm để nhảy tới.
 4. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
 5. Bấm nút xanh lá **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
-6. **Ngưỡng v3** (tùy chọn): ở mỗi tiêu chí bấm nút *Ngưỡng v3* để chấm theo từng thành phần. Ô viền đứt là gợi ý từ số liệu AI trích (cần xác minh); bấm *Dùng … làm điểm tiêu chí* để lấy tổng làm điểm. Tab *Số liệu* ở cột phải liệt kê số liệu đã trích; trang *Ngưỡng v3* có quy tắc và mốc đầy đủ. Lưu ý: tổng theo v3 thường thấp hơn điểm AI khoảng 20 điểm, hội đồng thống nhất cách dùng trước.
+6. **Điểm AI mặc định được chấm theo bộ ngưỡng v3** (chỉ cho điểm khi hồ sơ có bằng chứng). Ô *Lý do AI* ở mỗi tiêu chí liệt kê *Hồ sơ đang có* (kèm nguồn, trang, nhãn Kiểm chứng/Tự khai), *Vì sao cho điểm* từng thành phần và *Còn thiếu để lên bậc*. Bấm *Chấm theo thành phần* để sửa từng thành phần (ô tím là điểm AI), tổng tự cập nhật điểm tiêu chí. Trang *Tiêu chí* gộp thể lệ, cách chấm v3 và quy tắc chung. Giám khảo đã chấm trước khi đổi điểm AI được giữ nguyên điểm cũ.
 7. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
 
 ## Điều kiện
