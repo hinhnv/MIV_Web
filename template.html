@@ -591,7 +591,7 @@ function judgeDocs() { const j = Object.assign({}, S.judges); if (S.myId && S.mi
 function own(doc, stt, tt) { const v = doc && doc.scores && doc.scores[stt] ? doc.scores[stt][tt] : null; return typeof v === "number" ? v : null; }
 function eff(doc, p, i) {
   const v = own(doc, p.stt, i + 1); if (v != null) return v;
-  if (p.ai.s0 && doc && doc.aiVer !== AIV && scored(doc, p.stt)) return p.ai.s0[i]; // giam khao cham truoc khi doi diem AI: giu diem AI cu
+  if (doc && (doc.aiVer || 1) !== AIV && scored(doc, p.stt)) { const h = (p.ai.hist && p.ai.hist[String(doc.aiVer || 1)]) || p.ai.s0; if (h) return h[i]; } // giam khao cham truoc khi doi diem AI: giu diem AI cua phien ban do
   return p.ai.s[i];
 }
 function scored(doc, stt) { if (!doc) return false; if (doc.confirmed && doc.confirmed[stt]) return true; const s = doc.scores && doc.scores[stt]; return !!s && Object.values(s).some(v => typeof v === "number"); }
@@ -660,6 +660,9 @@ function pmap() {
 /* ---------- bộ ngưỡng v3 ---------- */
 const V3 = D.v3 || null;
 const TLAB = { DL: "Số liệu", BC: "Bằng chứng", CM: "Chuyên môn" };
+const NV = "v" + ((V3 && V3.ver) || 3);
+const lvPts = (part, lv) => { lv = Math.max(0, Math.min(+lv || 0, part.m)); return part.p ? part.p[lv] : lv; };
+const fmtP = x => String(x).replace(".", ",");
 const v3parts = tt => (V3 && V3.parts[tt] ? V3.parts[tt].parts : []);
 const myParts = (stt, tt) => (S.mine && S.mine.parts && S.mine.parts[stt] && S.mine.parts[stt][tt]) || {};
 const bandOf = (part, v) => (part.b || []).find(([lo, hi]) => v >= lo && v <= hi);
@@ -668,12 +671,12 @@ function v3eff(p, tt) {
   let s = 0, n = 0, full = ps.length > 0;
   ps.forEach(part => {
     const o = typeof mp[part.k] === "number" ? mp[part.k] : null, a = typeof ai[part.k] === "number" ? ai[part.k] : null, v = o != null ? o : a;
-    out[part.k] = { v, own: o != null, ai: a };
-    if (v == null) full = false; else s += v;
+    out[part.k] = { v, own: o != null, ai: a, pts: v == null ? null : lvPts(part, v) };
+    if (v == null) full = false; else s += lvPts(part, v);
     if (o != null) n++;
   });
   const cap = Math.min((V3 && V3.parts[tt] && V3.parts[tt].cap) || 999, C[tt - 1].max);
-  return { parts: out, s: Math.min(s, cap), n, full, of: ps.length, hasAI: Object.keys(ai).length > 0 };
+  return { parts: out, s: Math.min(Math.round(s + 1e-9), cap), n, full, of: ps.length, hasAI: Object.keys(ai).length > 0 };
 }
 const v3sum = (stt, tt) => v3eff(byStt.get(stt), tt);
 function v3panel(p, c) {
@@ -685,12 +688,12 @@ function v3panel(p, c) {
     const bd = ep.v != null ? bandOf(part, ep.v) : (sv != null ? bandOf(part, sv) : null);
     const cls = v => [ep.own && v === ep.v ? "on" : "", !ep.own && ep.ai != null && v === ep.ai ? "aion" : "", ep.own && ep.ai != null && v === ep.ai ? "aimk" : "", v === sv && ep.v == null ? "sg" : ""].join(" ");
     return `<div class="v3p"><div class="v3l"><b>${esc(part.k)}. ${esc(part.l)}</b><span class="tt t-${part.t}">${TLAB[part.t]}</span><span class="mut">/${part.m}</span></div>
-      <div class="v3k" role="group" aria-label="${esc(part.l)}">${Array.from({ length: part.m + 1 }, (_, v) => `<button class="${cls(v)}" aria-pressed="${ep.v === v}" data-act="v3pick" data-stt="${stt}" data-tt="${tt}" data-k="${esc(part.k)}" data-v="${v}" ${dis} title="${esc((bandOf(part, v) || [0, 0, ""])[2])}${v === ep.ai ? " (AI)" : ""}">${v}</button>`).join("")}</div>
+      <div class="v3k" role="group" aria-label="${esc(part.l)}">${Array.from({ length: part.m + 1 }, (_, v) => `<button class="${cls(v)}" aria-pressed="${ep.v === v}" data-act="v3pick" data-stt="${stt}" data-tt="${tt}" data-k="${esc(part.k)}" data-v="${v}" ${dis} title="Bậc ${v}: ${esc((bandOf(part, v) || [0, 0, ""])[2])}${v === ep.ai ? " (AI)" : ""}">${fmtP(lvPts(part, v))}</button>`).join("")}</div>
       <div class="v3d">${bd ? `${!ep.own && ep.ai != null ? `<span class="aichip">AI</span> ` : ep.v == null && sv != null ? `<span class="sgl">Gợi ý</span> ` : ""}${esc(bd[2])}` : `<span class="mut">Chưa chọn</span>`}${part.n ? `<div class="mut small">${esc(part.n)}</div>` : ""}</div></div>`;
   }).join("");
   const cur = eff(S.mine, p, tt - 1), mismatch = e.full && e.n > 0 && cur !== e.s;
   return `<div class="v3">
-    <div class="v3h"><b>Chấm theo thành phần (bộ ngưỡng v3)</b><span class="small mut">${e.hasAI ? "Ô tím là điểm AI chấm theo ngưỡng. Bấm số khác để sửa, tổng tự cập nhật điểm tiêu chí; bấm lại số đang chọn để trả về điểm AI." : "Chọn điểm từng thành phần. Ô viền đứt là gợi ý từ số liệu AI trích, cần xác minh."}</span></div>
+    <div class="v3h"><b>Chấm theo thành phần (bộ ngưỡng ${NV})</b><span class="small mut">${e.hasAI ? "Mỗi nút là một bậc, số trên nút là điểm của bậc đó; ô tím là bậc AI chọn. Bấm bậc khác để sửa, tổng tự cập nhật điểm tiêu chí; bấm lại số đang chọn để trả về điểm AI." : "Chọn điểm từng thành phần. Ô viền đứt là gợi ý từ số liệu AI trích, cần xác minh."}</span></div>
     ${fs.length ? `<dl class="v3f">${fs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${hl(v)}</dd>`).join("")}</dl>` : ""}
     ${rows}
     ${mismatch ? `<div class="v3warn"><span>Điểm tiêu chí đang là <b>${cur}</b>, khác tổng thành phần <b>${e.s}</b> (đã chỉnh bằng thanh trượt).</span><button class="btn sm" data-act="v3apply" data-stt="${stt}" data-tt="${tt}" ${dis}>Dùng tổng thành phần</button></div>` : ""}
@@ -701,9 +704,9 @@ function v3panel(p, c) {
 function v3reason(p, c, open, rk) {
   const v3a = p.ai.v3 && p.ai.v3[c.tt]; if (!v3a) return "";
   const ev = v3a.e || [], show = open ? ev : ev.slice(0, 3), ps = v3parts(c.tt), a = p.ai.s[c.tt - 1];
-  return `<div class="reason v3r"><span class="lb">AI chấm theo ngưỡng v3: ${a}/${c.max}</span>
+  return `<div class="reason v3r"><span class="lb">AI chấm theo ngưỡng ${NV}: ${a}/${c.max}</span>
     <div class="rz"><b>Hồ sơ đang có</b>${ev.length ? `<ul>${show.map(([t, src, m]) => `<li>${rich(t)}${src ? ` <span class="src">${esc(src)}</span>` : ""}${m ? ` <span class="km k${m === "K" ? "K" : "T"}">${m === "K" ? "Kiểm chứng" : "Tự khai"}</span>` : ""}</li>`).join("")}</ul>${!open && ev.length > 3 ? `<div class="small mut">… và ${ev.length - 3} mục khác</div>` : ""}` : `<div class="small mut">Không tìm thấy bằng chứng cho tiêu chí này trong hồ sơ.</div>`}</div>
-    <div class="rz"><b>Vì sao cho điểm</b><ul>${ps.map(part => `<li><span class="pk">${esc(part.k)}. ${esc(part.l)}: <b>${v3a.p[part.k] != null ? v3a.p[part.k] : "—"}</b>/${part.m}</span> · ${rich((v3a.w || {})[part.k] || "")}</li>`).join("")}</ul></div>
+    <div class="rz"><b>Vì sao cho điểm</b><ul>${ps.map(part => `<li><span class="pk">${esc(part.k)}. ${esc(part.l)}: ${v3a.p[part.k] != null ? `bậc ${v3a.p[part.k]}/${part.m} · <b>${fmtP(lvPts(part, v3a.p[part.k]))}</b> điểm` : "—"}</span> · ${rich((v3a.w || {})[part.k] || "")}</li>`).join("")}</ul></div>
     ${v3a.m ? `<div class="rz miss"><b>Còn thiếu để lên bậc:</b> ${rich(v3a.m)}</div>` : ""}
     ${ev.length > 3 ? `<button class="linkbtn" data-act="toggleR" data-k="${rk}">${open ? "Thu gọn" : "Xem đủ bằng chứng"}</button>` : ""}</div>`;
 }
@@ -964,7 +967,7 @@ function vComments() {
 }
 function critCard(c) {
   const ps = v3parts(c.tt), cap = V3 && V3.parts[c.tt] && V3.parts[c.tt].cap, a = mean(P.map(p => p.ai.s[c.tt - 1]));
-  const v3html = ps.length ? `<div class="sublh" style="margin-top:12px">Cách chấm (bộ ngưỡng v3): ${ps.map(x => x.k + " " + x.m).join(" + ")}${cap ? " · tổng tối đa " + cap : ""}</div>` + ps.map(x => `<div style="margin-top:8px"><div class="v3l" style="margin-bottom:2px"><b>${esc(x.k)}. ${esc(x.l)}</b><span class="tt t-${x.t}">${TLAB[x.t]}</span><span class="mut">/${x.m}</span></div><table class="bt3">${x.b.map(([lo, hi, t]) => `<tr><td>${lo === hi ? lo : lo + "–" + hi}</td><td>${hl(t)}</td></tr>`).join("")}</table>${x.n ? `<div class="small mut">${hl(x.n)}</div>` : ""}</div>`).join("")
+  const v3html = ps.length ? `<div class="sublh" style="margin-top:12px">Cách chấm (bộ ngưỡng ${NV}): ${ps.map(x => x.k + " " + x.m).join(" + ")}${cap ? " · tổng tối đa " + cap : ""} · cột trái: bậc → điểm</div>` + ps.map(x => `<div style="margin-top:8px"><div class="v3l" style="margin-bottom:2px"><b>${esc(x.k)}. ${esc(x.l)}</b><span class="tt t-${x.t}">${TLAB[x.t]}</span><span class="mut">/${x.m}</span></div><table class="bt3">${x.b.map(([lo, hi, t]) => `<tr><td>${lo === hi ? lo : lo + "–" + hi}<div class="mut" style="font-weight:600">${lo === hi ? fmtP(lvPts(x, lo)) : fmtP(lvPts(x, lo)) + "–" + fmtP(lvPts(x, hi))}đ</div></td><td>${hl(t)}</td></tr>`).join("")}</table>${x.n ? `<div class="small mut">${hl(x.n)}</div>` : ""}</div>`).join("")
     : `<table class="bt3" style="margin-top:10px">${(c.anchors || []).map(([lo, hi, t]) => `<tr><td>${lo === hi ? lo : lo + "–" + hi}</td><td>${esc(t)}</td></tr>`).join("")}</table>`;
   return `<section class="card"><h2><span class="row-flex" style="gap:8px;flex-wrap:nowrap"><span class="no-b" style="background:var(--brand);color:#fff;border-color:var(--brand)">${c.tt}</span>${esc(c.name)}</span><small>${c.max} điểm · TB AI ${fmt1(a)}</small></h2><div class="body">
     <div class="sublh">Tiêu chí thành phần (thể lệ)</div><ul class="subl">${c.sub.map(x => `<li>${hl(x)}</li>`).join("")}</ul>${v3html}</div></section>`;
@@ -972,12 +975,12 @@ function critCard(c) {
 function vCriteria() {
   const groups = ["I", "II"].map(g => { const cs = C.filter(c => c.group === g);
     return `<h2 class="grph">Nhóm ${g} · ${g === "I" ? "Thiết kế, sáng tạo tại Việt Nam" : "Tác động, ảnh hưởng"}<small>${sum(cs.map(c => c.max))} điểm</small></h2><div class="grid g2">${cs.map(critCard).join("")}</div>`; }).join("");
-  const v3ai = D.meta && D.meta.aiVer === 3;
-  return `<div class="wrap"><div class="pagehead"><div><h1>Tiêu chí chấm</h1><p>9 tiêu chí theo thể lệ (100 điểm) và cách chấm từng thành phần theo bộ ngưỡng định lượng v3. Bản đầy đủ (căn cứ, quy trình hiệu chuẩn, lưu ý cho Ban tổ chức) do thư ký giữ.</p></div></div>
-    ${v3ai ? `<div class="banner"><b>Điểm AI mặc định đã chấm lại theo bộ ngưỡng v3</b> (ngày ${esc(D.meta.scoredAt)}): chỉ cho điểm khi hồ sơ có bằng chứng, nên mặt bằng thấp hơn thang AI cũ. Điểm giám khảo đã chấm trước đó được giữ nguyên.</div>` : ""}
+  const v3ai = D.meta && D.meta.aiVer >= 3;
+  return `<div class="wrap"><div class="pagehead"><div><h1>Tiêu chí chấm</h1><p>9 tiêu chí theo thể lệ (100 điểm) và cách chấm từng thành phần theo bộ ngưỡng định lượng ${NV}. Bản đầy đủ (căn cứ, quy trình hiệu chuẩn, lưu ý cho Ban tổ chức) do thư ký giữ.</p></div></div>
+    ${v3ai ? `<div class="banner"><b>Điểm AI mặc định chấm theo bộ ngưỡng ${NV}</b> (ngày ${esc(D.meta.scoredAt)}): mỗi thành phần xếp bậc theo bằng chứng trong hồ sơ, rồi quy đổi ra điểm theo bảng ở quy tắc 1. Điểm giám khảo đã chấm trước khi đổi được giữ nguyên.</div>` : ""}
     ${V3 ? `<section class="card acc-warn"><h2>Quy tắc chung</h2><div class="body"><ol class="rules">${V3.rules.map(x => `<li>${hl(x)}</li>`).join("")}</ol><p class="small mut" style="margin:10px 0 0">Loại thành phần: <span class="tt t-DL">Số liệu</span> tra bảng từ số liệu · <span class="tt t-BC">Bằng chứng</span> xếp bậc theo mức bằng chứng · <span class="tt t-CM">Chuyên môn</span> giám khảo đánh giá theo mốc neo. Trong trang chấm, bấm "Chấm theo thành phần" ở từng tiêu chí.</p></div></section>` : ""}
     ${groups}
-    <section class="card"><h2>Xếp loại theo tổng điểm <small>${D.meta && D.meta.gradesTemp ? "tạm tính theo phân vị điểm AI v3 (top khoảng 10% / 30% / 60% / 85%); hội đồng chốt lại sau khi chấm" : "ngưỡng đề xuất, không có trong thể lệ"}</small></h2><div class="body row-flex">${D.grades.slice().reverse().map(([t, l], i, arr) => `<span class="pill ${GCLS[l]}">${l}: ${t}${i < arr.length - 1 ? "–" + (arr[i + 1][0] - 1) : "+"}</span>`).join("")}</div></section></div>`;
+    <section class="card"><h2>Xếp loại theo tổng điểm <small>${D.meta && D.meta.gradesTemp ? "tạm tính theo phân vị điểm AI " + NV + " (top khoảng 10% / 30% / 60% / 85%); hội đồng chốt lại sau khi chấm" : "ngưỡng đề xuất, không có trong thể lệ"}</small></h2><div class="body row-flex">${D.grades.slice().reverse().map(([t, l], i, arr) => `<span class="pill ${GCLS[l]}">${l}: ${t}${i < arr.length - 1 ? "–" + (arr[i + 1][0] - 1) : "+"}</span>`).join("")}</div></section></div>`;
 }
 function vExport() {
   const ok = !!S.dl;
@@ -1177,8 +1180,8 @@ async function doExport(kind) {
     const r4 = [["Thời gian", "Giám khảo", "STT", "Tên sản phẩm", "Tiêu chí", "Nội dung"]];
     CALC.cms.slice().reverse().forEach(c => r4.push([fmtT(c.at), names[c.by] || "", c.stt, byStt.get(c.stt).name, c.tt ? "TC" + c.tt + ". " + C[c.tt - 1].short : "Góp ý chung", c.text]));
     const s4 = X.utils.aoa_to_sheet(r4); s4["!cols"] = [{ wch: 14 }, { wch: 22 }, { wch: 5 }, { wch: 34 }, { wch: 22 }, { wch: 100 }]; X.utils.book_append_sheet(wb, s4, "Góp ý");
-    const r5 = [["STT", "Tên sản phẩm", "TC", "Thành phần", "Loại", "Điểm", "Tối đa", "Tổng v3 của TC"]];
-    P.forEach(p => C.forEach(c => { const e = v3eff(p, c.tt); if (!e.of || (!e.n && !e.hasAI)) return; v3parts(c.tt).forEach(x => { const ep = e.parts[x.k]; if (ep.v != null) r5.push([p.stt, p.name, c.tt, x.k + ". " + x.l, TLAB[x.t] + (ep.own ? " · GK sửa" : " · AI"), ep.v, x.m, e.s]); }); }));
+    const r5 = [["STT", "Tên sản phẩm", "TC", "Thành phần", "Loại", "Bậc", "Điểm", "Tối đa", "Tổng TC theo thành phần"]];
+    P.forEach(p => C.forEach(c => { const e = v3eff(p, c.tt); if (!e.of || (!e.n && !e.hasAI)) return; v3parts(c.tt).forEach(x => { const ep = e.parts[x.k]; if (ep.v != null) r5.push([p.stt, p.name, c.tt, x.k + ". " + x.l, TLAB[x.t] + (ep.own ? " · GK sửa" : " · AI"), ep.v, ep.pts, lvPts(x, x.m), e.s]); }); }));
     if (r5.length > 1) X.utils.book_append_sheet(wb, X.utils.aoa_to_sheet(r5), "Ngưỡng v3 của tôi");
     return save("MIV2026_cham_diem_" + stamp + ".xlsx", new Blob([X.write(wb, { bookType: "xlsx", type: "array" })]));
   }
@@ -1206,9 +1209,9 @@ async function boot() {
     if (S.mine && S.canWrite && AIV > 1 && S.mine.aiVer !== AIV && !dirty && !saving) {
       // diem AI mac dinh vua doi: chot diem AI cu vao nhung san pham ban da cham de diem cua ban khong doi
       let n = 0;
-      for (const p of P) if (p.ai.s0 && scored(S.mine, p.stt)) { const sc = (S.mine.scores[p.stt] = S.mine.scores[p.stt] || {}); C.forEach((c, i) => { if (typeof sc[c.tt] !== "number") sc[c.tt] = p.ai.s0[i]; }); n++; }
+      for (const p of P) { const h = (p.ai.hist && p.ai.hist[String(S.mine.aiVer || 1)]) || p.ai.s0; if (h && scored(S.mine, p.stt)) { const sc = (S.mine.scores[p.stt] = S.mine.scores[p.stt] || {}); C.forEach((c, i) => { if (typeof sc[c.tt] !== "number") sc[c.tt] = h[i]; }); n++; } }
       S.mine.aiVer = AIV; touch(true);
-      if (n) toast("Điểm AI mặc định đã cập nhật theo ngưỡng v3. Điểm bạn đã chấm ở " + n + " sản phẩm được giữ nguyên.");
+      if (n) toast("Điểm AI mặc định đã cập nhật theo ngưỡng " + NV + ". Điểm bạn đã chấm ở " + n + " sản phẩm được giữ nguyên; bấm \"Đặt lại theo AI\" ở sản phẩm nào muốn dùng điểm mới.");
     }
     render(); refreshProfiles();
   }, err => { clearTimeout(timer); S.mode = "stale"; S.canWrite = false; setSync("err", err && err.code === "revoked" ? "Mất quyền truy cập" : "Mất kết nối"); render(); });

@@ -269,3 +269,69 @@ def facts(r):
     add(9, "Kế hoạch gọi vốn có số tiền", "có" if stt in KE_HOACH_VON else "không thấy")
     for t, txt in EXTRA.get(stt, {}).items(): add(t, "Lưu ý review", txt)
     return {str(t): v for t, v in f.items() if v}
+
+
+# ===================== BO NGUONG V4 (18/11/2026) =====================
+# Giu cach xep bac bang chung cua v3 (bac = muc bang chung), doi bang quy doi bac -> diem theo thang hieu chuan
+# cua cuoc thi (tuyen bo chung ~50-60%, mo ta cu the ~75-85%, kiem chung 100%), ha nguong cac thanh phan
+# gan nhu ai cung 0, bo tran "tu khai" o bac cao nhat. Phan chuyen mon [CM] giu thang tuyen tinh.
+import copy as _copy
+
+MAX_TC = {1: 20, 2: 20, 3: 10, 4: 10, 5: 10, 6: 15, 7: 5, 8: 5, 9: 5}
+PTS = {1: [0, 1], 2: [0, 1.5, 2], 3: [0, 1.5, 2.5, 3], 4: [0, 2, 3, 3.5, 4], 5: [0, 2, 3, 4, 4.5, 5],
+       6: [0, 2.5, 3.5, 4, 5, 5.5, 6], 8: [0, 3, 4, 5, 5.5, 6.5, 7, 7.5, 8], 9: [0, 3, 4, 5, 6, 6.5, 7.5, 8, 8.5, 9]}
+
+
+def level_points(part, lv):
+    """Diem cua mot bac (bac la so nguyen 0..m)."""
+    lv = max(0, min(int(lv), part["m"]))
+    return part["p"][lv] if part.get("p") else lv
+
+
+V4 = _copy.deepcopy(V3)
+for _tt, _c in V4.items():
+    for _p in _c["parts"]:
+        _p["p"] = PTS[_p["m"]]   # moi thanh phan (ke ca chuyen mon) quy doi theo cung mot bang
+        for _b in _p["b"]:
+            _b[2] = _b[2].replace(" (cần chứng từ)", "")
+
+def _part(tt, k):
+    return next(p for p in V4[tt]["parts"] if p["k"] == k)
+
+# TC4-A: co nguoi dung that (tu khai) da duoc bac 1
+_part(4, "A")["b"][2] = [1, 1, "Case study tự viết có tên khách, hoặc có người dùng/khách thật (tự khai có tên, số)"]
+# TC4-D: dung thu theo giao thuc, quy doi nhu thang bang chung
+_part(4, "D")["p"] = PTS[3]
+# TC5: gop "Chinh sach" vao A (0-6)
+V4[5]["parts"] = [p for p in V4[5]["parts"] if p["k"] != "C"]
+_a5 = _part(5, "A")
+_a5.update({"l": "Mức cấp thiết & gắn chính sách", "m": 6, "b": [
+    [6, 6, "Lớn, cấp bách, ảnh hưởng diện rộng, gắn chỉ tiêu/điều khoản chính sách cụ thể"],
+    [5, 5, "Lớn, cấp bách, ảnh hưởng diện rộng"], [4, 4, "Rõ ràng, có ý nghĩa với một ngành/nhóm lớn"],
+    [3, 3, "Có ích cho một phân khúc"], [1, 2, "Mơ hồ / nhu cầu \"có thì tốt\""], [0, 0, "Không thuyết minh"]],
+    "n": "Nêu được điều, khoản hoặc chỉ tiêu chính sách mà sản phẩm đáp ứng thì cộng 1 bậc (tối đa 6)."})
+_a5["p"] = PTS[6]
+_part(5, "D")["b"][1] = [1, 1, "1–2 bằng chứng, hoặc có tổ chức thí điểm/dùng thử có tên (chưa cần biên bản)"]
+# TC6-B, TC6-C: ha nguong
+_part(6, "B")["b"] = [[2, 2, "Tăng ≥20% (doanh thu hoặc khách hàng, năm 2025 so với 2024)"],
+                      [1, 1, "Có tăng trưởng dương, có số liệu"], [0, 0, "Giảm, không có số, chưa đủ 2 năm"]]
+_part(6, "C")["b"] = [[2, 2, "Có số quy mô thị trường (TAM/SAM/SOM) kèm nguồn"], [1, 1, "Có số quy mô thị trường nhưng chưa ghi nguồn"],
+                      [0, 0, "Không có số"]]
+# TC9-B: suc hap dan dau tu -> chuyen mon
+_b9 = _part(9, "B")
+_b9.update({"l": "Sức hấp dẫn đầu tư", "t": "CM", "b": [
+    [2, 2, "Có lực kéo thị trường thật và kế hoạch/tín hiệu gọi vốn (kế hoạch có số tiền, LOI, GCN KH&CN/khởi nghiệp sáng tạo, có lãi)"],
+    [1, 1, "Có lực kéo hoặc tiềm năng sản phẩm rõ, chưa có kế hoạch gọi vốn"], [0, 0, "Chưa rõ"]],
+    "n": "Đánh giá khả năng thu hút nhà đầu tư; vốn đã nhận chấm ở A."})
+_b9["p"] = PTS[2]
+
+RULES_V4 = [
+    "Mỗi thành phần xếp theo BẬC bằng chứng (như v3), rồi quy đổi ra điểm theo bảng: thang 3 bậc → 1,5 / 2,5 / 3; thang 2 bậc → 1,5 / 2; thang 4 → 2 / 3 / 3,5 / 4; thang 5 → 2 / 3 / 4 / 4,5 / 5; thang 6 → 2,5 / 3,5 / 4 / 5 / 5,5 / 6; thang 9 (TC1-A) → 3 / 4 / 5 / 6 / 6,5 / 7,5 / 8 / 8,5 / 9. Áp cho mọi thành phần, kể cả chuyên môn. Điểm tiêu chí làm tròn tới số nguyên.",
+    "Kỳ số liệu: doanh thu năm 2025 (dưới 0,1 tỷ hoặc ra mắt sau 2025 thì lấy số lớn hơn giữa 2025 và 2026 tới ngày nộp); khách hàng, người dùng là số đang dùng tại ngày nộp; không dùng kế hoạch, trừ TC8 bậc 1–3 và TC9-B.",
+    "Số tự khai cụ thể, nhất quán được tính đủ bậc. Ban tổ chức xin chứng từ cho các hồ sơ dẫn đầu trước khi chốt; không bổ sung được thì hạ 1 bậc ở thành phần đó.",
+    "Số liệu mâu thuẫn (cùng chỉ tiêu, cùng kỳ): số có chứng từ thắng số tự khai; còn lại lấy số nhỏ hơn, chênh hơn 2 lần mà không có chứng từ thì hạ thêm 1 bậc.",
+    "Số của công ty chỉ dùng khi sản phẩm là nguồn thu chính (≥70%) và đã bán ≥12 tháng; còn lại coi số của sản phẩm bằng 0.",
+    "Khách hàng, doanh thu, đối tác, vốn từ công ty cùng tập đoàn không tính ở TC5-D, TC6-A, TC7, TC8, TC9-A.",
+    "Một khẳng định chỉ cho điểm ở một chỗ: văn bằng → TC3; thư đánh giá, gia hạn → TC4-A; LOI, thí điểm → TC5-D; hợp đồng trả phí → TC6-A; tăng trưởng → TC6-B; giải thưởng → TC1-D; vốn đã nhận → TC9-A.",
+    "Chấm phần chuyên môn [CM] trước khi xem điểm AI; nghi vấn tư cách dự thi không làm đổi điểm (đánh dấu cho Ban tổ chức).",
+]
