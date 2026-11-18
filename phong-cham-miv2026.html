@@ -471,7 +471,6 @@ table.bt3{border-collapse:collapse;font-size:13px;width:100%;margin:4px 0}
       <input id="q" type="search" autocomplete="off" placeholder="Tìm sản phẩm, doanh nghiệp, nội dung hồ sơ, lý do chấm…  (phím /)" aria-label="Tìm kiếm">
       <span class="cnt" id="qcnt" aria-live="polite"></span>
       <button class="iconbtn" id="qnext" title="Đến chỗ khớp tiếp theo" aria-label="Đến chỗ khớp tiếp theo" hidden>↓</button>
-      <label title="Tô sáng chỗ khớp"><input id="hl" type="checkbox" checked> Tô sáng</label>
     </div>
     <div class="who">
       <span class="sync" id="sync" role="status"><i></i><span>Đang kết nối…</span></span>
@@ -1144,7 +1143,6 @@ $("#q").addEventListener("input", e => {
     if (S.terms.length && ["tong-quan", "tieu-chi", "nguong", "xuat-du-lieu", "xep-hang"].includes(S.route)) location.hash = "bang-diem"; else render();
   }, 180);
 });
-$("#hl").addEventListener("change", e => { S.hlOn = e.target.checked; render(); });
 $("#qnext").addEventListener("click", nextMark);
 window.addEventListener("hashchange", () => { const prev = S.route; S.route = parseRoute(); markIx = -1; if (prev !== S.route) { S.openCm = {}; } render(); window.scrollTo(0, 0); });
 
