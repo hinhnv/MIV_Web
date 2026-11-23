@@ -5,7 +5,7 @@
 //   node server.js user <username> <password> <ten>  -> them/sua tai khoan (password "-" = doc tu stdin)
 //   node server.js deluser <username>                -> xoa tai khoan
 //   node server.js list | count                      -> liet ke / dem tai khoan
-//   node server.js admin <username> [off]            -> cap / bo quyen quan tri (sua trang Phan cong)
+//   node server.js admin <username> [off]            -> cap / bo quyen quan tri (sua cot Phan cong / Loai o trang Cham diem)
 "use strict";
 const http = require("node:http");
 const fs = require("node:fs");
@@ -18,7 +18,7 @@ const PAGE = process.env.PAGE_FILE || path.join(ROOT, "phong-cham-miv2026.html")
 const PORT = Number(process.env.PORT || 3001);
 const USERS_F = path.join(DATA, "users.json");
 const JUDGES_F = path.join(DATA, "judges.json");
-const CONFIG_F = path.join(DATA, "config.json"); // phan cong nhom, ho so bi loai, co danh dau (chi nam tren server)
+const CONFIG_F = path.join(DATA, "config.json"); // phan cong giam khao, ho so bi loai, co danh dau (chi nam tren server)
 const SECRET_F = path.join(DATA, "session-secret");
 const SESSION_DAYS = 30;
 const MAX_BODY = 4 * 1024 * 1024;
@@ -54,7 +54,7 @@ if (cmd === "rename") { // doi ten dang nhap, giu nguyen ID nen giu nguyen diem 
   console.log("da doi " + from + " -> " + to + " (giu nguyen diem da cham)");
   process.exit(0);
 }
-if (cmd === "admin") { // cap quyen quan tri: sua trang Phan cong
+if (cmd === "admin") { // cap quyen quan tri: sua phan cong, loai ho so
   const users = readJson(USERS_F, {});
   const u = String(args[0] || "").trim().toLowerCase();
   if (!users[u]) { console.error("khong co tai khoan " + u); process.exit(1); }
@@ -129,6 +129,7 @@ function cleanConfig(b) {
     if (!/^\d{1,4}$/.test(k) || !v || typeof v !== "object" || Array.isArray(v)) return null;
     const o = {};
     const grp = str(v.group, 24); if (grp && groups.some(g => g.id === grp)) o.group = grp;
+    const judge = str(v.judge, 64).toLowerCase(); if (judge) o.judge = judge; // ten dang nhap giam khao phu trach
     const excl = str(v.excl, 200); if (excl) o.excl = excl;
     if (v.multi === true) o.multi = true;
     if (v.verify === true) o.verify = true;

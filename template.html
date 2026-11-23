@@ -153,7 +153,8 @@ main{min-width:0;padding-block:22px 48px;padding-left:max(16px,env(safe-area-ins
 .p-verify{background:#fff7ed;color:#c2410c;border-color:#fb923c}
 .p-mine{background:var(--brand);color:#fff}
 .chips-in{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.chips-in .pill{font-size:11px;padding:1px 8px}
-.t tr.excl td{background:#f8fafc}.t tr.excl .nm{text-decoration:line-through;color:var(--faint)}.t tr.excl .co{color:var(--faint)}
+.t tr.excl td{background:#fafafa}.t tr.excl .nm{color:var(--muted)}.t tr.excl .co{color:var(--faint)}
+.note-x{display:flex;flex-direction:column;gap:3px;align-items:flex-start}.note-x small{font-size:11.5px;color:#991b1b;font-weight:600}
 .cell.x{background:repeating-linear-gradient(135deg,#f8fafc 0 4px,#e2e8f0 4px 8px);color:#94a3b8;border-color:#e2e8f0;text-decoration:line-through}
 .cell.dim{opacity:.45}
 .asg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
@@ -169,6 +170,9 @@ main{min-width:0;padding-block:22px 48px;padding-left:max(16px,env(safe-area-ins
 .banner.b-info{background:#fefce8;border-color:#fde68a;border-left-color:#facc15}.banner.b-info b{color:#854d0e}
 .asg-me-line{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:14px}
 .t-bad{color:var(--bad)}
+.t select.cfg-sel{min-height:32px;height:32px;padding:3px 26px 3px 8px;font-size:13px;width:auto;max-width:170px}
+.t select.cfg-sel.on{border-color:var(--brand-line);background-color:var(--brand-soft2);color:var(--brand-ink);font-weight:700}
+.t select.cfg-sel.x{border-color:var(--bad-line);background-color:var(--bad-soft);color:#991b1b;font-weight:700}
 .tag{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1.5px solid var(--line);background:#fff;padding:9px 14px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;color:var(--ink);min-height:40px;white-space:nowrap;transition:background .15s,border-color .15s,color .15s,box-shadow .15s}
 .btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-soft2)}
@@ -508,7 +512,7 @@ table.bt3{border-collapse:collapse;font-size:13px;width:100%;margin:4px 0}
     <div class="navtabs">
       <a href="#tong-quan" data-r="tong-quan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Tổng quan</a>
       <a href="#bang-diem" data-r="bang-diem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Chấm điểm<span class="badge" id="todo-badge" hidden></span></a>
-      <a href="#phan-cong" data-r="phan-cong"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><path d="M2 20a6 6 0 0 1 12 0M12 20a5 5 0 0 1 10 0"/></svg>Phân công</a>
+      <a href="#cua-toi" data-r="cua-toi" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="m16 11 2 2 4-4"/></svg>Hồ sơ của tôi<span class="badge" id="mine-badge" hidden></span></a>
       <a href="#xep-hang" data-r="xep-hang"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Xếp hạng</a>
       <a href="#gop-y" data-r="gop-y"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Góp ý</a>
       <a href="#tieu-chi" data-r="tieu-chi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Tiêu chí</a>
@@ -534,8 +538,8 @@ const main = $("#main");
 /* ---------- state ---------- */
 const S = {
   route: "tong-quan", q: "", terms: [], hlOn: true,
-  sort: { key: "stt", dir: 1 }, f: { text: "", grade: "", scope: "", grp: "" }, ttab: "all", showTC: false,
-  miv: null, cfg: null, cfgDraft: null, cfgDirty: false, meUname: "", isAdmin: false, hideExcl: true,
+  sort: { key: "stt", dir: 1 }, f: { text: "", grade: "", scope: "", judge: "" }, ttab: "all", showTC: false,
+  miv: null, cfg: null, cfgServer: null, cfgSaving: false, cfgDirtyQ: false, meUname: "", isAdmin: false, hideExcl: true,
   basis: "ai", cmFilter: "", tab: "hoso", openR: {}, openCm: {}, openV3: {},
   mode: "local", canWrite: false, dbReady: false, myId: null, meName: "", meAvatar: "",
   judges: {}, mine: null, profiles: {}, drafts: {}, savedAt: null,
@@ -652,25 +656,75 @@ function nextTodo(fromStt) { const rest = (CALC ? CALC.queue : P).filter(p => !i
 function basisVal(p, b) { const r = CALC.per.get(p.stt); return b === "mine" ? r.mine : b === "avg" ? r.avg : r.ai; }
 const BASIS = { ai: "Điểm AI", mine: "Điểm của tôi", avg: "TB hội đồng" };
 
-/* ---------- phân công nhóm (lưu trên máy chủ, quản trị sửa ở trang Phân công) ---------- */
+/* ---------- phân công & hồ sơ loại (lưu trên máy chủ; quản trị sửa ngay trong bảng Chấm điểm) ---------- */
 const CFG0 = { version: 0, groups: [], products: {}, users: [] };
 const CF = () => S.cfg || CFG0;
 const pcf = stt => CF().products[stt] || {};
 const isExcl = stt => !!pcf(stt).excl;
-const grpOf = stt => CF().groups.find(g => g.id === pcf(stt).group) || null;
-const gNo = g => CF().groups.indexOf(g) + 1;
+const judgeOf = stt => pcf(stt).judge || "";
 const uName = u => { const x = (CF().users || []).find(v => v.uname === u); return x ? x.name : u; };
-const myGroups = () => S.meUname ? CF().groups.filter(g => (g.judges || []).includes(S.meUname)) : [];
-const isMine = stt => { const g = grpOf(stt); return !!g && !isExcl(stt) && (g.judges || []).includes(S.meUname); };
-const scopeOf = () => S.f.scope || (CALC && CALC.mineL.length ? "mine" : "active");
-const gpillOf = g => `<span class="pill p-grp g${gNo(g)}" title="${esc(g.name + ((g.judges || []).length ? " · phụ trách: " + g.judges.map(uName).join(", ") : ""))}">${esc(g.short || g.id)}</span>`;
-function cfgChips(stt, full) {
-  const c = pcf(stt), g = grpOf(stt); let h = "";
-  if (c.excl) h += `<span class="pill p-excl" title="${esc(c.excl)}">${full ? "Đã loại: " + esc(c.excl) : "Đã loại"}</span>`;
-  if (g) h += gpillOf(g) + (full && (g.judges || []).length ? `<span class="tag">Phụ trách: ${esc(g.judges.map(uName).join(", "))}</span>` : "");
+const isMine = stt => !isExcl(stt) && !!S.meUname && judgeOf(stt) === S.meUname;
+const scopeOf = () => S.f.scope || "all";
+const EXCL_OPTS = [["", "—"], ["Doanh nghiệp / viện nghiên cứu lớn", "DN, viện lớn"], ["Hộ kinh doanh, không phải doanh nghiệp", "Hộ kinh doanh"], ["Không đúng hạng mục", "Sai hạng mục"], ["Khác", "Khác"]];
+const exclShort = r => { const o = EXCL_OPTS.find(x => x[0] === r); return o ? o[1] : r; };
+function cfgChips(stt, full, noExcl) {
+  const c = pcf(stt), j = judgeOf(stt); let h = "";
+  if (c.excl && !noExcl) h += `<span class="pill p-excl" title="${esc(c.excl)}">${full ? "Đã loại: " + esc(c.excl) : "Đã loại"}</span>`;
+  if (full && j) h += `<span class="tag">Phụ trách: ${esc(uName(j))}</span>`;
   if (c.multi) h += `<span class="pill p-multi" title="Sản phẩm đang dự thi nhiều hạng mục / giải khác">★ Thi nhiều nơi</span>`;
   if (c.verify) h += `<span class="pill p-verify" title="Cần xác minh quy mô trước khi chấm">Cần xác minh quy mô</span>`;
   return h;
+}
+function cfgSet(stt, field, value) {
+  if (!S.cfg || !S.isAdmin) return;
+  const k = String(stt), prods = Object.assign({}, S.cfg.products), o = Object.assign({}, prods[k]);
+  if (value) o[field] = value; else delete o[field];
+  if (field === "judge") delete o.group;
+  if (Object.keys(o).length) prods[k] = o; else delete prods[k];
+  S.cfg = Object.assign({}, S.cfg, { products: prods });
+  if (field === "excl") toast(value ? `Đã loại hồ sơ ${stt} (${exclShort(value)}). Hồ sơ vẫn hiện trong danh sách, ghi chú "không cần chấm".` : `Hồ sơ ${stt} trở lại danh sách đang xét.`);
+  cfgQueue(); render();
+}
+let cfgT = null;
+function cfgQueue() { S.cfgDirtyQ = true; setSync("saving", "Đang lưu…"); clearTimeout(cfgT); cfgT = setTimeout(cfgFlush, 300); }
+async function cfgFlush() {
+  if (S.cfgSaving || !S.cfgDirtyQ || !S.miv || !S.cfg) return;
+  S.cfgSaving = true; S.cfgDirtyQ = false;
+  try {
+    const r = await S.miv.saveConfig({ base: S.cfg.version, groups: S.cfg.groups || [], products: S.cfg.products });
+    S.cfg = Object.assign({}, S.cfg, { version: r.version, updatedAt: new Date().toISOString(), updatedBy: S.meName }); setSync("ok", "Đã lưu");
+  } catch (e) {
+    const c = e && e.code; S.cfgDirtyQ = false;
+    if (c === "conflict") { if (S.cfgServer) S.cfg = S.cfgServer; toast("Có người vừa sửa phân công; đã tải bản mới nhất, bạn chọn lại giúp."); }
+    else toast(c === "invalid_argument" ? "Tài khoản này không có quyền sửa phân công." : "Chưa lưu được phân công (" + (c || "lỗi mạng") + ").");
+    setSync("err", "Lỗi lưu phân công"); render();
+  }
+  S.cfgSaving = false;
+  if (S.cfgDirtyQ) { clearTimeout(cfgT); cfgT = setTimeout(cfgFlush, 300); }
+}
+function normCfg(j) { // file JSON phân công: chỉ giữ các trường đã biết; file cũ theo nhóm thì lấy giám khảo đầu tiên của nhóm
+  if (!j || !j.products || typeof j.products !== "object") return null;
+  const groups = Array.isArray(j.groups) ? j.groups : [];
+  const products = {};
+  for (const [k, v] of Object.entries(j.products)) { if (!/^\d{1,4}$/.test(k) || !v || typeof v !== "object") continue; const o = {};
+    let jd = typeof v.judge === "string" ? v.judge.trim().toLowerCase() : "";
+    if (!jd && typeof v.group === "string") { const g = groups.find(x => x && x.id === v.group); if (g && Array.isArray(g.judges) && g.judges[0]) jd = String(g.judges[0]).trim().toLowerCase(); }
+    if (jd) o.judge = jd;
+    if (typeof v.excl === "string" && v.excl.trim()) o.excl = v.excl.trim();
+    if (v.multi === true) o.multi = true; if (v.verify === true) o.verify = true;
+    if (typeof v.note === "string" && v.note.trim()) o.note = v.note.trim();
+    if (Object.keys(o).length) products[k] = o; }
+  return { groups: [], products };
+}
+function cfgImport() {
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".json,application/json";
+  inp.onchange = async () => { const f = inp.files && inp.files[0]; if (!f) return;
+    let c = null; try { c = normCfg(JSON.parse(await f.text())); } catch (e) { }
+    if (!c) { toast("File không đúng định dạng phân công."); return; }
+    const vs = Object.values(c.products), nj = vs.filter(o => o.judge).length, nx = vs.filter(o => o.excl).length;
+    if (!confirm(`Nạp phân công từ file "${f.name}": ${nj} hồ sơ có người phụ trách, ${nx} hồ sơ bị loại.\nThay thế toàn bộ phân công hiện tại?`)) return;
+    S.cfg = Object.assign({}, S.cfg, { groups: [], products: c.products }); cfgQueue(); render(); toast("Đã nạp phân công từ file."); };
+  inp.click();
 }
 
 /* ---------- people ---------- */
@@ -799,7 +853,7 @@ function vDashboard() {
         <span class="eyebrow">Tiến độ chấm của bạn</span>
         <h1>${hello}</h1>
         <p>Mỗi sản phẩm có sẵn <b class="t-ai">điểm AI</b> để tham khảo. Bạn chỉ cần sửa tiêu chí không đồng ý (thành <b class="t-gk">điểm của bạn</b>), rồi bấm <b class="t-ok">Xác nhận</b>.</p>
-        ${myGroups().length ? `<div class="asg-me-line">Bạn phụ trách ${myGroups().map(gpillOf).join("")} <b>${esc(myGroups().map(g => g.name).join("; "))}</b> · ${QN} hồ sơ <a class="small" href="#phan-cong" style="font-weight:700">Xem phân công →</a></div>` : ""}
+        ${CALC.mineL.length ? `<div class="asg-me-line">Bạn được phân công <b>${CALC.mineL.length}</b> hồ sơ. <a href="#cua-toi" style="font-weight:700">Mở tab Hồ sơ của tôi →</a></div>` : ""}
         <div class="hprog"><b class="num">${CALC.done}<small>/${QN}</small></b><span class="bar good"><i style="width:${pct}%"></i></span><span class="num">${pct}%</span></div>
         <div class="row-flex">${nx ? `<a class="btn pri lg" href="#sp-${nx.stt}">${CALC.done ? "Tiếp tục chấm" : "Bắt đầu chấm"} →</a>` : `<span class="pill st-done lg">✓ Đã chấm xong ${QN}/${QN}</span>`}<a class="btn lg" href="#bang-diem">Danh sách sản phẩm</a></div>
         ${nx ? `<div class="small mut">Tiếp theo: <b style="color:var(--ink)">${esc(nx.stt + ". " + nx.name.slice(0, 64))}</b></div>` : ""}
@@ -830,31 +884,38 @@ function vDashboard() {
 }
 
 /* ---------- Danh sách chấm ---------- */
-function vTable() {
+function vTable(mine) {
   const per = CALC.per; const f = S.f; const ft = fold(f.text);
   let rows = P.map(p => ({ p, r: per.get(p.stt), m: matchInfo(p) })).filter(x => x.m.ok);
   if (ft) rows = rows.filter(x => fold(x.p.name + " " + x.p.company).includes(ft));
   if (f.grade) rows = rows.filter(x => grade(x.r.mine) === f.grade);
   const sc = scopeOf();
   if (S.cfg) {
-    rows = rows.filter(x => sc === "all" ? true : sc === "excl" ? isExcl(x.p.stt) : sc === "mine" ? isMine(x.p.stt) : !isExcl(x.p.stt));
-    if (f.grp) rows = rows.filter(x => (pcf(x.p.stt).group || "") === f.grp);
+    if (mine) rows = rows.filter(x => isMine(x.p.stt));
+    else rows = rows.filter(x => sc === "excl" ? isExcl(x.p.stt) : sc === "active" ? !isExcl(x.p.stt) : true);
+    if (f.judge && !mine) rows = rows.filter(x => judgeOf(x.p.stt) === (f.judge === "-" ? "" : f.judge));
   }
   const counts = { all: rows.length, todo: 0, doing: 0, done: 0, cm: 0 };
   rows.forEach(x => { counts[status(x.p.stt)]++; if (CALC.cmCount.get(x.p.stt)) counts.cm++; });
   if (S.ttab === "cm") rows = rows.filter(x => CALC.cmCount.get(x.p.stt)); else if (S.ttab !== "all") rows = rows.filter(x => status(x.p.stt) === S.ttab);
   const k = S.sort.key, d = S.sort.dir;
-  const val = x => k === "stt" ? x.p.stt : k === "name" ? fold(x.p.name) : k === "ai" ? x.r.ai : k === "mine" ? x.r.mine : k === "avg" ? (x.r.avg == null ? -1 : x.r.avg) : k === "cm" ? (CALC.cmCount.get(x.p.stt) || 0) : k === "st" ? ({ todo: 0, doing: 1, done: 2 })[status(x.p.stt)] : k.startsWith("c") ? eff(S.mine, x.p, +k.slice(1)) : 0;
+  const val = x => k === "pc" ? fold(judgeOf(x.p.stt) ? uName(judgeOf(x.p.stt)) : "~") : k === "ex" ? (isExcl(x.p.stt) ? 1 : 0) : k === "stt" ? x.p.stt : k === "name" ? fold(x.p.name) : k === "ai" ? x.r.ai : k === "mine" ? x.r.mine : k === "avg" ? (x.r.avg == null ? -1 : x.r.avg) : k === "cm" ? (CALC.cmCount.get(x.p.stt) || 0) : k === "st" ? ({ todo: 0, doing: 1, done: 2 })[status(x.p.stt)] : k.startsWith("c") ? eff(S.mine, x.p, +k.slice(1)) : 0;
   rows.sort((a, b) => { const va = val(a), vb = val(b); return (va < vb ? -1 : va > vb ? 1 : 0) * d || a.p.stt - b.p.stt; });
   const th = (key, label, cls = "", title = "") => `<th class="sortable ${cls}" data-act="sort" data-k="${key}" title="${esc(title || "Sắp xếp")}" aria-sort="${S.sort.key === key ? (S.sort.dir > 0 ? "ascending" : "descending") : "none"}">${label}<span class="ar">${S.sort.key === key ? (S.sort.dir > 0 ? "▲" : "▼") : "↕"}</span></th>`;
   const tcTh = S.showTC ? C.map((c, i) => th("c" + i, "TC" + c.tt, "c", c.name + " (tối đa " + c.max + ")")).join("") : "";
+  const adm = !!(S.cfg && S.isAdmin), users = CF().users || [];
   const body = rows.map(({ p, r, m }) => {
     const tc = S.showTC ? C.map((c, i) => { const mv = eff(S.mine, p, i), a = p.ai.s[i]; return `<td class="c num"><span class="sc ${mv !== a ? "chg" : ""}"><b>${mv}</b>${mv !== a ? `<s>${a}</s>` : ""}</span></td>`; }).join("") : "";
     const cm = CALC.cmCount.get(p.stt) || 0; const dl = r.mine - r.ai; const st = status(p.stt);
-    const chips = cfgChips(p.stt);
+    const chips = cfgChips(p.stt, false, !!S.cfg);
+    const j = judgeOf(p.stt), ex = pcf(p.stt).excl || "";
+    const pcCell = !S.cfg || mine ? "" : adm ? `<td><select class="inp sm cfg-sel ${j ? "on" : ""}" data-cfg="judge" data-stt="${p.stt}" aria-label="Phân công hồ sơ ${p.stt}"><option value="">—</option>${users.map(u => `<option value="${esc(u.uname)}" ${u.uname === j ? "selected" : ""}>${esc(u.name)}</option>`).join("")}${j && !users.some(u => u.uname === j) ? `<option value="${esc(j)}" selected>${esc(j)} (không có tài khoản)</option>` : ""}</select></td>`
+      : `<td class="small" style="white-space:nowrap">${j ? `<b>${esc(uName(j))}</b>` : '<span class="mut">—</span>'}</td>`;
+    const exCell = !S.cfg ? "" : adm ? `<td><div class="note-x"><select class="inp sm cfg-sel ${ex ? "x" : ""}" data-cfg="excl" data-stt="${p.stt}" aria-label="Ghi chú loại hồ sơ ${p.stt}" title="${esc(ex)}">${[...EXCL_OPTS, ...(ex && !EXCL_OPTS.some(o => o[0] === ex) ? [[ex, ex]] : [])].map(([v, l]) => `<option value="${esc(v)}" ${v === ex ? "selected" : ""}>${v ? "Loại: " + esc(l) : "—"}</option>`).join("")}</select>${ex ? "<small>Không cần chấm</small>" : ""}</div></td>`
+      : `<td>${ex ? `<div class="note-x"><span class="pill p-excl" title="${esc(ex)}">Loại: ${esc(exclShort(ex))}</span><small>Không cần chấm</small></div>` : ""}</td>`;
     return `<tr data-act="open" data-stt="${p.stt}" class="${isExcl(p.stt) ? "excl" : ""}">
       <td><span class="no-b">${p.stt}</span></td>
-      <td style="min-width:260px"><div class="nm">${hl(p.name)}</div><div class="co">${hl(p.company)}</div>${chips ? `<div class="chips-in">${chips}</div>` : ""}${m.where.length ? `<div class="hit">Khớp ở: ${m.where.slice(0, 5).map(esc).join(", ")}${m.where.length > 5 ? "…" : ""}</div>` : ""}</td>
+      <td style="min-width:260px"><div class="nm">${hl(p.name)}</div><div class="co">${hl(p.company)}</div>${chips ? `<div class="chips-in">${chips}</div>` : ""}${m.where.length ? `<div class="hit">Khớp ở: ${m.where.slice(0, 5).map(esc).join(", ")}${m.where.length > 5 ? "…" : ""}</div>` : ""}</td>${pcCell}${exCell}
       <td class="c">${spill(p.stt)}</td>${tc}
       <td class="c num"><span class="tot ai">${r.ai}</span></td>
       <td class="c num"><span class="tot gk">${r.mine}</span>${dl ? `<div class="dl ${dl > 0 ? "up" : "dn"}">${dl > 0 ? "+" : ""}${dl}</div>` : ""}</td>
@@ -864,12 +925,12 @@ function vTable() {
       <td><a class="btn sm ${st === "done" ? "" : "soft"}" href="#sp-${p.stt}">${st === "done" ? "Xem" : "Chấm"} →</a></td></tr>`;
   }).join("");
   const nx = nextTodo(0); const QN = CALC.queue.length; const pct = QN ? Math.round(CALC.done / QN * 100) : 0; const all = stCounts();
-  const scopeSel = S.cfg ? `<select class="inp" style="width:auto" data-f="scope" aria-label="Phạm vi hồ sơ">${[["mine", "Hồ sơ tôi phụ trách", CALC.mineL.length], ["active", "Hồ sơ đang xét", CALC.active.length], ["all", "Tất cả hồ sơ", N], ["excl", "Hồ sơ đã loại", N - CALC.active.length]].filter(o => o[0] !== "mine" || o[2] || sc === "mine").map(([v, l, n]) => `<option value="${v}" ${sc === v ? "selected" : ""}>${l} (${n})</option>`).join("")}</select>` +
-    (CF().groups.length ? `<select class="inp" style="width:auto;max-width:280px" data-f="grp" aria-label="Nhóm lĩnh vực"><option value="">Mọi nhóm</option>${CF().groups.map(g => `<option value="${esc(g.id)}" ${f.grp === g.id ? "selected" : ""}>${esc((g.short || g.id) + (g.name ? " – " + g.name : ""))}</option>`).join("")}</select>` : "") : "";
+  const scopeSel = S.cfg && !mine ? `<select class="inp" style="width:auto" data-f="scope" aria-label="Phạm vi hồ sơ">${[["all", "Tất cả hồ sơ", N], ["active", "Hồ sơ cần chấm", CALC.active.length], ["excl", "Hồ sơ loại (không chấm)", N - CALC.active.length]].map(([v, l, n]) => `<option value="${v}" ${sc === v ? "selected" : ""}>${l} (${n})</option>`).join("")}</select>` +
+    (() => { const js = [...new Set(P.map(p => judgeOf(p.stt)).filter(Boolean))]; return js.length ? `<select class="inp" style="width:auto;max-width:240px" data-f="judge" aria-label="Lọc theo người phụ trách"><option value="">Mọi người phụ trách</option>${js.map(u => `<option value="${esc(u)}" ${f.judge === u ? "selected" : ""}>${esc(uName(u))} (${P.filter(p => judgeOf(p.stt) === u && !isExcl(p.stt)).length})</option>`).join("")}<option value="-" ${f.judge === "-" ? "selected" : ""}>Chưa phân công</option></select>` : ""; })() : "";
   const tabs = [["all", "Tất cả"], ["todo", "Chưa chấm"], ["doing", "Đang chấm"], ["done", "Đã chấm"], ["cm", "Có góp ý"]];
   const gradeOpts = ["", ...D.grades.map(g => g[1])].map(g => `<option value="${esc(g)}" ${f.grade === g ? "selected" : ""}>${g ? "Xếp loại: " + g : "Mọi xếp loại"}</option>`).join("");
   return `<div class="wrap">
-    <div class="pagehead"><div><h1>Chấm điểm</h1><p>Bấm vào một sản phẩm để mở phiếu chấm. Điểm <b class="t-gk">Của tôi</b> mặc định bằng <b class="t-ai">điểm AI</b> cho tới khi bạn sửa.</p></div>
+    <div class="pagehead"><div><h1>${mine ? "Hồ sơ của tôi" : "Chấm điểm"}</h1><p>${mine ? `${CALC.mineL.length} hồ sơ được phân công cho bạn. ` : "Tất cả 55 hồ sơ; hồ sơ của riêng bạn ở tab <b>Hồ sơ của tôi</b>. "}Bấm vào một sản phẩm để mở phiếu chấm. Điểm <b class="t-gk">Của tôi</b> mặc định bằng <b class="t-ai">điểm AI</b> cho tới khi bạn sửa.${S.cfg && S.isAdmin && !mine ? " Cột <b>Phân công</b> và <b>Ghi chú</b> chọn trực tiếp, tự lưu cho mọi người." : ""}</p></div>
       <div class="row-flex">${nx ? `<a class="btn pri" href="#sp-${nx.stt}">Chấm sản phẩm chưa chấm tiếp theo →</a>` : ""}</div></div>
     ${banner()}
     <section class="card progcard"><b class="num">${CALC.done}<small>/${QN} ${CALC.mineL.length ? "hồ sơ phụ trách" : "hồ sơ đang xét"} đã xác nhận</small></b><span class="bar good"><i style="width:${pct}%"></i></span><div class="stchips"><span class="pill st-done">✓ Đã chấm ${all.done}</span><span class="pill st-doing">✎ Đang chấm ${all.doing}</span><span class="pill st-todo">Chưa chấm ${all.todo}</span></div></section>
@@ -878,8 +939,8 @@ function vTable() {
       <div class="left">${scopeSel}<input class="inp" style="width:240px" type="text" id="f-text" data-f="text" placeholder="Lọc theo tên SP, doanh nghiệp" value="${esc(f.text)}" aria-label="Lọc theo tên"><select class="inp" style="width:auto" id="f-grade" data-f="grade" aria-label="Xếp loại">${gradeOpts}</select><label class="chk"><input type="checkbox" id="f-tc" data-act="tc" ${S.showTC ? "checked" : ""}> Hiện 9 tiêu chí</label></div>
     </div>
     <div class="tbl-wrap card"><table class="t">
-      <thead><tr>${th("stt", "STT")}${th("name", "Sản phẩm / Doanh nghiệp")}${th("st", "Trạng thái", "c")}${tcTh}${th("ai", "AI", "c", "Tổng điểm AI")}${th("mine", "Của tôi", "c", "Tổng điểm của tôi")}${th("avg", "Hội đồng", "c", "Trung bình các giám khảo đã chấm")}<th class="c">Xếp loại</th>${th("cm", "Góp ý", "c")}<th></th></tr></thead>
-      <tbody>${body || `<tr><td colspan="${9 + (S.showTC ? 9 : 0)}" class="empty" style="text-align:center;padding:28px">Không có sản phẩm nào khớp. Thử chọn "Tất cả" hoặc bỏ bớt bộ lọc.</td></tr>`}</tbody>
+      <thead><tr>${th("stt", "STT")}${th("name", "Sản phẩm / Doanh nghiệp")}${S.cfg && !mine ? th("pc", "Phân công", "", "Giám khảo phụ trách hồ sơ") : ""}${S.cfg ? th("ex", "Ghi chú", "", "Hồ sơ loại thì không cần chấm") : ""}${th("st", "Trạng thái", "c")}${tcTh}${th("ai", "AI", "c", "Tổng điểm AI")}${th("mine", "Của tôi", "c", "Tổng điểm của tôi")}${th("avg", "Hội đồng", "c", "Trung bình các giám khảo đã chấm")}<th class="c">Xếp loại</th>${th("cm", "Góp ý", "c")}<th></th></tr></thead>
+      <tbody>${body || `<tr><td colspan="${9 + (S.showTC ? 9 : 0) + (S.cfg ? (mine ? 1 : 2) : 0)}" class="empty" style="text-align:center;padding:28px">Không có sản phẩm nào khớp. Thử chọn "Tất cả" hoặc bỏ bớt bộ lọc.</td></tr>`}</tbody>
     </table></div>
   </div>`;
 }
@@ -970,7 +1031,7 @@ function vProduct(stt) {
   const jumpOpts = P.map(q => { const s2 = status(q.stt); return `<option value="${q.stt}" ${q.stt === stt ? "selected" : ""}>${isExcl(q.stt) ? "✕ " : s2 === "done" ? "✓ " : s2 === "doing" ? "✎ " : ""}${esc(q.stt + ". " + q.name.slice(0, 48))}</option>`; }).join("");
   const saveTxt = S.savedAt ? "Đã lưu lúc " + fmtHM(S.savedAt) : "Tự lưu khi sửa";
   return `<div class="wrap">
-    <div class="crumb"><a href="#bang-diem">Chấm điểm</a> › <span>${esc(p.stt + ". " + p.name.slice(0, 70))}</span></div>
+    <div class="crumb"><a href="#${S.lastList || "bang-diem"}">${S.lastList === "cua-toi" ? "Hồ sơ của tôi" : "Chấm điểm"}</a> › <span>${esc(p.stt + ". " + p.name.slice(0, 70))}</span></div>
     ${banner()}
     ${(() => { const c = pcf(stt); let h = "";
       if (c.excl) h += `<div class="banner b-excl"><b>Hồ sơ đã được Tiểu ban loại:</b> ${esc(c.excl)}. Không cần chấm hồ sơ này.</div>`;
@@ -1015,13 +1076,12 @@ function vRank() {
   const b = S.basis; const per = CALC.per; const bc = BCLS[b];
   let src = P;
   if (S.cfg && S.hideExcl) src = src.filter(p => !isExcl(p.stt));
-  if (S.cfg && S.f.grp) src = src.filter(p => (pcf(p.stt).group || "") === S.f.grp);
   const list = src.map(p => [p, basisVal(p, b)]).sort((x, y) => (y[1] == null ? -1 : y[1]) - (x[1] == null ? -1 : x[1]) || x[0].stt - y[0].stt);
   const rows = list.map(([p, v]) => { const r = per.get(p.stt); const rank = v == null ? "—" : 1 + list.filter(([, y]) => y != null && y > v).length;
     return `<tr data-act="open" data-stt="${p.stt}"><td class="c"><span class="rk ${rank <= 3 ? "r" + rank : ""}">${rank}</span></td><td><span class="no-b">${p.stt}</span></td><td style="min-width:240px"><div class="nm">${hl(p.name)}</div><div class="co">${hl(p.company)}</div>${cfgChips(p.stt) ? `<div class="chips-in">${cfgChips(p.stt)}</div>` : ""}</td>
       <td style="min-width:200px"><div class="track" style="height:11px"><i class="${bc}" style="width:${v == null ? 0 : v}%"></i></div></td><td class="c num"><span class="tot ${bc}">${fmt1(v)}</span></td>
       <td class="c num t-ai" style="font-weight:700">${r.ai}</td><td class="c num t-hd" style="font-weight:700">${r.n ? fmt1(r.avg) + ` <span class="mut small">(${r.n})</span>` : "—"}</td><td class="c">${gpill(v)}</td></tr>`; }).join("");
-  const rf = S.cfg ? `<div class="row-flex">${CF().groups.length ? `<select class="inp" style="width:auto;max-width:280px" data-f="grp" aria-label="Nhóm lĩnh vực"><option value="">Mọi nhóm</option>${CF().groups.map(g => `<option value="${esc(g.id)}" ${S.f.grp === g.id ? "selected" : ""}>${esc((g.short || g.id) + (g.name ? " – " + g.name : ""))}</option>`).join("")}</select>` : ""}<label class="chk"><input type="checkbox" data-act="hidex" ${S.hideExcl ? "checked" : ""}> Ẩn hồ sơ đã loại</label></div>` : "";
+  const rf = S.cfg ? `<div class="row-flex"><label class="chk"><input type="checkbox" data-act="hidex" ${S.hideExcl ? "checked" : ""}> Ẩn hồ sơ đã loại</label></div>` : "";
   return `<div class="wrap"><div class="pagehead"><div><h1>Xếp hạng</h1><p>Theo ${BASIS[b]}${b === "avg" ? " (trung bình các giám khảo đã chấm)" : ""} · ${list.length} hồ sơ.</p></div><div class="row-flex">${rf}${basisSeg()}</div></div>
     ${b === "avg" && !P.some(p => per.get(p.stt).n) ? `<div class="banner"><b>Chưa có điểm giám khảo.</b> Bảng xếp hạng theo hội đồng sẽ hiện khi có người chấm.</div>` : ""}
     <div class="tbl-wrap card"><table class="t"><thead><tr><th class="c">Hạng</th><th>STT</th><th>Sản phẩm</th><th></th><th class="c">${BASIS[b]}</th><th class="c">AI</th><th class="c">Hội đồng</th><th class="c">Xếp loại</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
@@ -1058,115 +1118,31 @@ function vExport() {
     ${ok ? "" : `<div class="banner"><b>Chế độ xem này không tải file được.</b> Dùng "Sao chép bảng" rồi dán vào Excel.</div>`}
     <div class="grid g3">${card("Excel tổng hợp (.xlsx)", "4 sheet: Tổng hợp (điểm AI, của tôi, TB hội đồng theo 9 tiêu chí), Lý do AI chấm, Điểm từng giám khảo, Góp ý.", `<button class="btn ok" data-act="exp" data-v="xlsx" ${ok ? "" : "disabled"}>Tải file Excel</button>`, "ok", IC.xls)}
     ${card("Bảng điểm (.csv)", "Một dòng mỗi sản phẩm, mở bằng Excel / Google Sheets (UTF-8).", `<button class="btn pri" data-act="exp" data-v="csv" ${ok ? "" : "disabled"}>Tải CSV</button><button class="btn" data-act="exp" data-v="copy">Sao chép bảng</button>`, "blue", IC.csv)}
-    ${card("Sao lưu đầy đủ (.json)", "Toàn bộ hồ sơ, điểm AI, điểm và góp ý của mọi giám khảo.", `<button class="btn" data-act="exp" data-v="json" ${ok ? "" : "disabled"}>Tải JSON</button>`, "slate", IC.json)}</div></div>`;
-}
-
-/* ---------- Phân công ---------- */
-const EXCL_PRESETS = ["Doanh nghiệp / viện nghiên cứu lớn", "Hộ kinh doanh, không phải doanh nghiệp", "Không đúng hạng mục", "Khác"];
-function asgBtns() {
-  if (!S.cfg || !S.isAdmin) return "";
-  return S.cfgDraft ? `<div class="row-flex"><button class="btn ok" data-act="asg-save">Lưu phân công</button><button class="btn" data-act="asg-cancel">Hủy</button></div>`
-    : `<div class="row-flex"><button class="btn pri" data-act="asg-edit">Chỉnh sửa</button><button class="btn" data-act="asg-import">Nhập từ file JSON</button><button class="btn" data-act="asg-export">Tải JSON</button></div>`;
-}
-function vAssign() {
-  const head = `<div class="pagehead"><div><h1>Phân công</h1><p>Hồ sơ chia theo nhóm lĩnh vực cho từng giám khảo; đánh dấu hồ sơ đã loại, dự thi nhiều nơi, cần xác minh quy mô.</p></div>${asgBtns()}</div>`;
-  if (!S.miv) return `<div class="wrap">${head}<div class="banner"><b>Chưa có dữ liệu phân công.</b> Trang này chỉ hoạt động trên bản chạy trên máy chủ.</div></div>`;
-  if (!S.cfg) return `<div class="wrap">${head}<div class="empty">Đang tải phân công…</div></div>`;
-  const ed = !!S.cfgDraft, cfg = ed ? S.cfgDraft : S.cfg, G = cfg.groups, users = S.cfg.users || [];
-  const pc = stt => cfg.products[stt] || {};
-  const nm = u => { const x = users.find(v => v.uname === u); return x ? esc(x.name) : `<span class="t-bad" title="Không có tài khoản ${esc(u)}">${esc(u)}</span>`; };
-  const chip = p => { const c = pc(p.stt); return `<a class="sc-chip${c.multi ? " m" : ""}${c.verify ? " v" : ""}" href="#sp-${p.stt}" title="${esc(p.stt + ". " + p.name + " · " + p.company + (c.multi ? " · thi nhiều nơi" : "") + (c.verify ? " · cần xác minh quy mô" : ""))}">${c.multi ? "★" : ""}${p.stt}</a>`; };
-  const active = P.filter(p => !pc(p.stt).excl), excl = P.filter(p => pc(p.stt).excl);
-  const gp = (g, i) => `<span class="pill p-grp g${i + 1}">${esc(g.short || g.id)}</span>`;
-  const cards = G.map((g, i) => { const ps = active.filter(p => pc(p.stt).group === g.id); const me = (g.judges || []).includes(S.meUname);
-    return `<section class="card asg ${me ? "asg-me" : ""}"><div class="body"><div class="row-flex" style="justify-content:space-between">${gp(g, i)}<b class="num">${ps.length} hồ sơ</b></div><h3>${esc(g.name || "(chưa đặt tên lĩnh vực)")}</h3><div class="small">Phụ trách: <b>${(g.judges || []).map(nm).join(", ") || '<span class="mut">chưa giao</span>'}</b>${me ? ' <span class="pill p-mine">Bạn</span>' : ""}</div><div class="stt-chips">${ps.map(chip).join("") || '<span class="mut small">chưa có hồ sơ</span>'}</div></div></section>`; }).join("");
-  const ung = active.filter(p => !G.some(g => g.id === pc(p.stt).group));
-  const reasons = [...new Set(excl.map(p => pc(p.stt).excl))];
-  const exCard = excl.length ? `<section class="card asg asg-x"><div class="body"><div class="row-flex" style="justify-content:space-between"><span class="pill p-excl">Đã loại</span><b class="num">${excl.length} hồ sơ</b></div>${reasons.map(r => `<h3>${esc(r)}</h3><div class="stt-chips">${excl.filter(p => pc(p.stt).excl === r).map(chip).join("")}</div>`).join("")}</div></section>` : "";
-  const ungCard = ung.length ? `<section class="card asg"><div class="body"><div class="row-flex" style="justify-content:space-between"><span class="pill st-todo">Chưa phân nhóm</span><b class="num">${ung.length} hồ sơ</b></div><div class="stt-chips">${ung.map(chip).join("")}</div></div></section>` : "";
-  const multi = P.filter(p => pc(p.stt).multi), ver = P.filter(p => pc(p.stt).verify);
-  const flags = `<section class="card"><div class="body row-flex" style="gap:22px;align-items:center"><span><span class="pill p-multi">★ Dự thi nhiều nơi</span><span class="stt-chips inl">${multi.map(chip).join("") || '<span class="mut small">không có</span>'}</span></span><span><span class="pill p-verify">Cần xác minh quy mô</span><span class="stt-chips inl">${ver.map(chip).join("") || '<span class="mut small">không có</span>'}</span></span></div></section>`;
-  const gEdit = ed ? `<section class="card"><h2>Nhóm lĩnh vực và giám khảo phụ trách</h2><div class="body"><div class="tbl-wrap"><table class="t"><thead><tr><th>Mã</th><th>Tên ngắn</th><th>Lĩnh vực</th><th>Giám khảo phụ trách</th><th></th></tr></thead><tbody>${G.map((g, i) => `<tr style="cursor:default"><td>${gp({ short: g.id }, i)}</td><td><input class="inp sm" style="width:110px" id="asg-gs-${i}" data-asg="g-short" data-g="${i}" value="${esc(g.short)}"></td><td><input class="inp sm" style="min-width:260px" id="asg-gn-${i}" data-asg="g-name" data-g="${i}" value="${esc(g.name)}"></td><td><div class="row-flex" style="gap:4px 12px">${users.map(u => `<label class="chk"><input type="checkbox" data-asg="g-judge" data-g="${i}" data-u="${esc(u.uname)}" ${(g.judges || []).includes(u.uname) ? "checked" : ""}> ${esc(u.name)}</label>`).join("")}${(g.judges || []).filter(j => !users.some(u => u.uname === j)).map(j => `<span class="pill p-excl" title="Không có tài khoản này; bỏ chọn bằng cách xóa trong file JSON hoặc chọn lại">${esc(j)}</span>`).join("")}</div></td><td><button class="btn sm ghost" data-act="asg-delg" data-g="${i}">Xóa nhóm</button></td></tr>`).join("")}</tbody></table></div><div style="margin-top:10px"><button class="btn sm" data-act="asg-addg">+ Thêm nhóm</button></div></div></section>` : "";
-  const rows = P.map(p => { const c = pc(p.stt), g = G.find(x => x.id === c.group), gi = g ? G.indexOf(g) : -1;
-    const who = g ? (g.judges || []).map(nm).join(", ") : "";
-    if (!ed) return `<tr data-act="open" data-stt="${p.stt}" class="${c.excl ? "excl" : ""}"><td><span class="no-b">${p.stt}</span></td><td style="min-width:240px"><div class="nm">${hl(p.name)}</div><div class="co">${hl(p.company)}</div></td><td>${g ? gp(g, gi) : '<span class="mut">—</span>'}</td><td class="small">${who}</td><td>${c.excl ? `<span class="pill p-excl">Loại: ${esc(c.excl)}</span>` : '<span class="pill st-todo">Đang xét</span>'}</td><td class="c">${c.multi ? '<span class="pill p-multi">★</span>' : ""}</td><td class="c">${c.verify ? '<span class="pill p-verify">Xác minh</span>' : ""}</td><td class="small">${hl(c.note || "")}</td></tr>`;
-    const exOpts = ["", ...EXCL_PRESETS, ...(c.excl && !EXCL_PRESETS.includes(c.excl) ? [c.excl] : [])].map(v => `<option value="${esc(v)}" ${(c.excl || "") === v ? "selected" : ""}>${v ? "Loại: " + esc(v) : "Đang xét"}</option>`).join("");
-    return `<tr style="cursor:default" class="${c.excl ? "excl" : ""}"><td><span class="no-b">${p.stt}</span></td><td style="min-width:240px"><div class="nm">${esc(p.name)}</div><div class="co">${esc(p.company)}</div></td><td><select class="inp sm" style="width:auto" data-asg="group" data-stt="${p.stt}" aria-label="Nhóm của hồ sơ ${p.stt}"><option value="">— Chưa phân —</option>${G.map(x => `<option value="${esc(x.id)}" ${c.group === x.id ? "selected" : ""}>${esc(x.short || x.id)}</option>`).join("")}</select></td><td class="small">${who}</td><td><select class="inp sm" style="width:auto" data-asg="excl" data-stt="${p.stt}" aria-label="Trạng thái xét hồ sơ ${p.stt}">${exOpts}</select></td><td class="c"><input type="checkbox" data-asg="multi" data-stt="${p.stt}" ${c.multi ? "checked" : ""} aria-label="Hồ sơ ${p.stt} dự thi nhiều nơi"></td><td class="c"><input type="checkbox" data-asg="verify" data-stt="${p.stt}" ${c.verify ? "checked" : ""} aria-label="Hồ sơ ${p.stt} cần xác minh quy mô"></td><td><input class="inp sm" style="min-width:180px" id="asg-note-${p.stt}" data-asg="note" data-stt="${p.stt}" value="${esc(c.note || "")}" placeholder="Ghi chú"></td></tr>`;
-  }).join("");
-  const upd = S.cfg.version ? `Cập nhật ${esc(fmtT(S.cfg.updatedAt))} bởi ${esc(S.cfg.updatedBy || "")} · phiên bản ${S.cfg.version}` : "Chưa có phân công nào được lưu.";
-  return `<div class="wrap">${head}
-    ${ed ? `<div class="banner"><b>Đang chỉnh sửa${S.cfgDirty ? " (chưa lưu)" : ""}.</b> Sửa nhóm, trạng thái, đánh dấu ở bảng dưới rồi bấm "Lưu phân công". Mọi giám khảo thấy thay đổi sau vài giây.</div>` : ""}
-    <div class="asg-grid">${cards}${exCard}${ungCard}</div>
-    ${flags}
-    ${gEdit}
-    <section class="card"><h2>Danh sách ${N} hồ sơ <small>${active.length} đang xét · ${excl.length} đã loại</small></h2><div class="tbl-wrap"><table class="t"><thead><tr><th>STT</th><th>Sản phẩm / Doanh nghiệp</th><th>Nhóm</th><th>Phụ trách</th><th>Trạng thái</th><th class="c">★ Nhiều nơi</th><th class="c">Xác minh quy mô</th><th>Ghi chú</th></tr></thead><tbody>${rows}</tbody></table></div></section>
-    <p class="small mut">${upd}${S.isAdmin ? "" : " · Chỉ quản trị mới sửa được phân công."}</p></div>`;
-}
-function asgSet(t, quiet) {
-  const d = S.cfgDraft, f = t.dataset.asg; if (!d) return;
-  if (f.startsWith("g-")) {
-    const g = d.groups[+t.dataset.g]; if (!g) return;
-    if (f === "g-short") g.short = t.value; else if (f === "g-name") g.name = t.value;
-    else if (f === "g-judge") { const st = new Set(g.judges || []); if (t.checked) st.add(t.dataset.u); else st.delete(t.dataset.u); g.judges = [...st]; }
-  } else {
-    const k = String(t.dataset.stt); const o = Object.assign({}, d.products[k]);
-    if (f === "multi" || f === "verify") { if (t.checked) o[f] = true; else delete o[f]; }
-    else if (t.value.trim()) o[f] = t.value; else delete o[f];
-    if (Object.keys(o).length) d.products[k] = o; else delete d.products[k];
-  }
-  S.cfgDirty = true; if (!quiet) render();
-}
-function normCfg(j) { // nhận file JSON phân công: chỉ giữ các trường đã biết
-  if (!j || !Array.isArray(j.groups) || !j.products || typeof j.products !== "object") return null;
-  const groups = j.groups.filter(g => g && /^[\w-]{1,24}$/.test(g.id)).map(g => ({ id: g.id, short: String(g.short || ""), name: String(g.name || ""), judges: Array.isArray(g.judges) ? g.judges.map(x => String(x).trim().toLowerCase()).filter(Boolean) : [] }));
-  const products = {};
-  for (const [k, v] of Object.entries(j.products)) { if (!/^\d{1,4}$/.test(k) || !v || typeof v !== "object") continue; const o = {};
-    if (typeof v.group === "string" && groups.some(g => g.id === v.group)) o.group = v.group;
-    if (typeof v.excl === "string" && v.excl.trim()) o.excl = v.excl.trim();
-    if (v.multi === true) o.multi = true; if (v.verify === true) o.verify = true;
-    if (typeof v.note === "string" && v.note.trim()) o.note = v.note.trim();
-    if (Object.keys(o).length) products[k] = o; }
-  return { groups, products };
-}
-function asgImport() {
-  const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".json,application/json";
-  inp.onchange = async () => { const f = inp.files && inp.files[0]; if (!f) return;
-    let c = null; try { c = normCfg(JSON.parse(await f.text())); } catch (e) { }
-    if (!c) { toast("File không đúng định dạng phân công (cần có groups và products)."); return; }
-    S.cfgDraft = c; S.cfgDirty = true; render(); toast("Đã nạp file. Kiểm tra lại rồi bấm Lưu phân công."); };
-  inp.click();
-}
-async function asgSave() {
-  if (!S.miv || !S.cfgDraft) return;
-  const d = S.cfgDraft;
-  try {
-    const r = await S.miv.saveConfig({ base: S.cfg.version, groups: d.groups, products: d.products });
-    S.cfg = Object.assign({}, S.cfg, { groups: d.groups, products: d.products, version: r.version, updatedAt: new Date().toISOString(), updatedBy: S.meName });
-    S.cfgDraft = null; S.cfgDirty = false; render(); toast("Đã lưu phân công (phiên bản " + r.version + ").");
-  } catch (e) {
-    const c = e && e.code;
-    toast(c === "conflict" ? "Có người vừa sửa phân công. Đợi vài giây để trang tải bản mới (bản nháp của bạn vẫn giữ), kiểm tra rồi lưu lại."
-      : c === "invalid_argument" ? "Tài khoản này không có quyền quản trị." : c === "error_400" ? "Dữ liệu phân công không hợp lệ." : "Chưa lưu được (" + (c || "lỗi mạng") + ").");
-  }
+    ${card("Sao lưu đầy đủ (.json)", "Toàn bộ hồ sơ, điểm AI, điểm và góp ý của mọi giám khảo.", `<button class="btn" data-act="exp" data-v="json" ${ok ? "" : "disabled"}>Tải JSON</button>`, "slate", IC.json)}
+    ${S.cfg ? card("Phân công & hồ sơ loại (.json)", "Người phụ trách, hồ sơ bị loại, đánh dấu ★ / cần xác minh của 55 hồ sơ." + (S.isAdmin ? " Nạp file để thay toàn bộ phân công một lần." : ""), `<button class="btn" data-act="cfg-export" ${ok ? "" : "disabled"}>Tải JSON</button>${S.isAdmin ? `<button class="btn pri" data-act="cfg-import">Nhập từ file</button>` : ""}`, "warn", IC.team) : ""}</div></div>`;
 }
 
 /* ---------- render ---------- */
-const ROUTES = ["tong-quan", "bang-diem", "phan-cong", "xep-hang", "gop-y", "tieu-chi", "xuat-du-lieu"];
-function parseRoute() { const h = (location.hash || "").replace(/^#/, ""); if (h === "nguong") return "tieu-chi"; if (/^sp-\d+$/.test(h) && byStt.has(+h.slice(3))) return h; return ROUTES.includes(h) ? h : "tong-quan"; }
+const ROUTES = ["tong-quan", "bang-diem", "cua-toi", "xep-hang", "gop-y", "tieu-chi", "xuat-du-lieu"];
+function parseRoute() { const h = (location.hash || "").replace(/^#/, ""); if (h === "nguong") return "tieu-chi"; if (h === "phan-cong") return "bang-diem"; if (/^sp-\d+$/.test(h) && byStt.has(+h.slice(3))) return h; return ROUTES.includes(h) ? h : "tong-quan"; }
 function render() {
   if (S.dragging) { S.pendingRender = true; return; }
   compute();
   const ae = document.activeElement; const fid = ae && ae.id && main.contains(ae) ? ae.id : null; let ss = null, se = null;
   if (fid) { try { ss = ae.selectionStart; se = ae.selectionEnd; } catch (e) { } }
   const r = S.route;
-  main.innerHTML = r.startsWith("sp-") ? vProduct(+r.slice(3)) : r === "bang-diem" ? vTable() : r === "xep-hang" ? vRank() : r === "gop-y" ? vComments() : r === "tieu-chi" ? vCriteria() : r === "xuat-du-lieu" ? vExport() : r === "phan-cong" ? vAssign() : vDashboard();
+  if (r === "bang-diem" || r === "cua-toi") S.lastList = r;
+  main.innerHTML = r.startsWith("sp-") ? vProduct(+r.slice(3)) : r === "bang-diem" ? vTable() : r === "cua-toi" ? vTable(true) : r === "xep-hang" ? vRank() : r === "gop-y" ? vComments() : r === "tieu-chi" ? vCriteria() : r === "xuat-du-lieu" ? vExport() : vDashboard();
   main.classList.toggle("has-mbar", r.startsWith("sp-"));
-  document.querySelectorAll("#side a").forEach(a => { const on = a.dataset.r === (r.startsWith("sp-") ? "bang-diem" : r); a.classList.toggle("on", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  document.querySelectorAll("#side a").forEach(a => { const on = a.dataset.r === (r.startsWith("sp-") ? (S.lastList || "bang-diem") : r); a.classList.toggle("on", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   if (fid) { const el = document.getElementById(fid); if (el) { el.focus({ preventScroll: true }); try { if (ss != null) el.setSelectionRange(ss, se); } catch (e) { } } }
   const marks = main.querySelectorAll("mark").length;
   $("#qcnt").textContent = S.terms.length ? (marks ? marks + " chỗ khớp" : "không khớp") : "";
   $("#qnext").hidden = !(S.terms.length && marks && S.hlOn);
-  const todo = CALC.queue.length - CALC.done; const bd = $("#todo-badge"); bd.hidden = !S.canWrite || !todo; bd.textContent = todo;
+  const todo = CALC.queue.length - CALC.done, hasMine = CALC.mineL.length > 0;
+  const bd = $("#todo-badge"); bd.hidden = !S.canWrite || !todo || hasMine; bd.textContent = todo;
+  const mb = $("#mine-badge"); mb.hidden = !S.canWrite || !todo || !hasMine; mb.textContent = todo;
+  const ml = document.querySelector('#side a[data-r="cua-toi"]'); if (ml) ml.style.display = hasMine ? "" : "none";
   $("#side-prog").innerHTML = S.mode === "local" ? "" : `<span>Bạn đã chấm <b>${CALC.done}/${CALC.queue.length}</b></span><span class="bar sm good"><i style="width:${CALC.queue.length ? CALC.done / CALC.queue.length * 100 : 0}%"></i></span>`;
   renderMe();
 }
@@ -1228,7 +1204,7 @@ function goNextTodo(stt) {
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
-  if (a === "open") { if (e.target.closest("a")) return; location.hash = "sp-" + t.dataset.stt; return; }
+  if (a === "open") { if (e.target.closest("a, select, input, label, button")) return; location.hash = "sp-" + t.dataset.stt; return; }
   if (a === "sort") { const k = t.dataset.k; S.sort = { key: k, dir: S.sort.key === k ? -S.sort.dir : (k === "stt" || k === "name" ? 1 : -1) }; render(); return; }
   if (a === "basis") { S.basis = t.dataset.v; render(); return; }
   if (a === "ttab") { S.ttab = t.dataset.v; render(); return; }
@@ -1240,19 +1216,8 @@ document.addEventListener("click", e => {
   if (a === "toggleCm") { S.openCm[t.dataset.k] = !S.openCm[t.dataset.k]; render(); if (S.openCm[t.dataset.k]) { const ta = document.getElementById("cm-" + t.dataset.k); if (ta) ta.focus(); } return; }
   if (a === "exp") { doExport(t.dataset.v); return; }
   if (a === "hidex") { S.hideExcl = t.checked; render(); return; }
-  if (a.startsWith("asg-") && S.isAdmin && S.cfg) {
-    const d = S.cfgDraft;
-    if (a === "asg-edit") { S.cfgDraft = JSON.parse(JSON.stringify({ groups: S.cfg.groups, products: S.cfg.products })); S.cfgDirty = false; render(); }
-    else if (a === "asg-cancel") { if (S.cfgDirty && !confirm("Bỏ các thay đổi chưa lưu?")) return; S.cfgDraft = null; S.cfgDirty = false; render(); }
-    else if (a === "asg-save") asgSave();
-    else if (a === "asg-import") asgImport();
-    else if (a === "asg-export") save("MIV2026_phan_cong_" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify({ groups: S.cfg.groups, products: S.cfg.products }, null, 1));
-    else if (a === "asg-addg" && d) { let n = d.groups.length + 1; while (d.groups.some(g => g.id === "g" + n)) n++; d.groups.push({ id: "g" + n, short: "Nhóm " + n, name: "", judges: [] }); S.cfgDirty = true; render(); }
-    else if (a === "asg-delg" && d) { const i = +t.dataset.g, g = d.groups[i]; if (!g) return; const used = Object.values(d.products).filter(o => o.group === g.id).length;
-      if (used && !confirm("Nhóm " + (g.short || g.id) + " đang có " + used + " hồ sơ. Xóa nhóm thì các hồ sơ này thành chưa phân nhóm. Tiếp tục?")) return;
-      d.groups.splice(i, 1); for (const o of Object.values(d.products)) if (o.group === g.id) delete o.group; S.cfgDirty = true; render(); }
-    return;
-  }
+  if (a === "cfg-export" && S.cfg) { save("MIV2026_phan_cong_" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify({ products: S.cfg.products }, null, 1)); return; }
+  if (a === "cfg-import" && S.cfg && S.isAdmin) { cfgImport(); return; }
   if (!S.canWrite || !S.mine) return;
   const stt = +t.dataset.stt, tt = +t.dataset.tt; const p = byStt.get(stt);
   if (a === "pick") setScore(stt, tt, +t.dataset.v);
@@ -1284,7 +1249,6 @@ let fT;
 document.addEventListener("input", e => {
   const t = e.target;
   if (t.dataset.range) { liveRange(t); return; }
-  if (t.dataset.asg && t.tagName === "INPUT" && t.type !== "checkbox") { asgSet(t, true); return; }
   if (t.id && (t.id.startsWith("cm-") || t.id.startsWith("note-") || t.id.startsWith("sc-"))) S.drafts[t.id] = t.value;
   if (t.dataset.f === "text") { S.f.text = t.value; clearTimeout(fT); fT = setTimeout(render, 200); }
 });
@@ -1293,7 +1257,7 @@ document.addEventListener("change", e => {
   if (t.dataset.range) { S.dragging = false; const [stt, tt] = t.dataset.range.split(":").map(Number); if (S.canWrite) setScore(stt, tt, +t.value); return; }
   if (t.dataset.score) { const [stt, tt] = t.dataset.score.split(":").map(Number); if (!S.canWrite) return; setScore(stt, tt, t.value === "" ? null : Number(t.value)); return; }
   if (t.id === "jump-sel") { location.hash = "sp-" + t.value; return; }
-  if (t.dataset.asg) { asgSet(t, t.tagName === "INPUT" && t.type !== "checkbox"); return; }
+  if (t.dataset.cfg) { cfgSet(+t.dataset.stt, t.dataset.cfg, t.value); return; }
   if (t.dataset.f && t.dataset.f !== "text") { S.f[t.dataset.f] = t.value; render(); return; }
   if (t.id === "cm-filter") { S.cmFilter = t.value; render(); }
 });
@@ -1315,7 +1279,7 @@ let qT;
 $("#q").addEventListener("input", e => {
   clearTimeout(qT); qT = setTimeout(() => {
     S.q = e.target.value; S.terms = fold(S.q).split(/\s+/).filter(t => t.length >= 2); markIx = -1;
-    if (S.terms.length && ["tong-quan", "tieu-chi", "nguong", "xuat-du-lieu", "xep-hang", "phan-cong"].includes(S.route)) location.hash = "bang-diem"; else render();
+    if (S.terms.length && ["tong-quan", "tieu-chi", "nguong", "xuat-du-lieu", "xep-hang"].includes(S.route)) location.hash = "bang-diem"; else render();
   }, 180);
 });
 $("#qnext").addEventListener("click", nextMark);
@@ -1323,8 +1287,8 @@ window.addEventListener("hashchange", () => { const prev = S.route; S.route = pa
 
 /* ---------- export ---------- */
 function rowsSummary() {
-  const head = ["STT", "ID", "Tên sản phẩm", "Doanh nghiệp", ...C.map(c => "AI TC" + c.tt + " (/" + c.max + ")"), "Tổng AI", ...C.map(c => "Của tôi TC" + c.tt), "Tổng của tôi", "Tôi đã xác nhận", ...C.map(c => "TB GK TC" + c.tt), "TB tổng GK", "Số GK đã chấm", "Xếp loại (của tôi)", "Độ tin cậy bằng chứng (AI)", "Số góp ý", "Nhận xét AI", "Nhóm", "Phụ trách", "Trạng thái xét", "Dự thi nhiều nơi", "Cần xác minh quy mô", "Ghi chú phân công"];
-  const rows = P.map(p => { const r = CALC.per.get(p.stt); return [p.stt, p.id, p.name, p.company, ...p.ai.s, r.ai, ...C.map((c, i) => eff(S.mine, p, i)), r.mine, isDone(p.stt) ? "x" : "", ...r.crit.map(v => v == null ? "" : Math.round(v * 10) / 10), r.avg == null ? "" : Math.round(r.avg * 10) / 10, r.n, grade(r.mine), p.ai.conf, CALC.cmCount.get(p.stt) || 0, p.ai.summary, ...(() => { const c = pcf(p.stt), g = grpOf(p.stt); return [g ? (g.short || g.id) + (g.name ? " – " + g.name : "") : "", g ? (g.judges || []).map(uName).join(", ") : "", c.excl ? "Loại: " + c.excl : "Đang xét", c.multi ? "x" : "", c.verify ? "x" : "", c.note || ""]; })()]; });
+  const head = ["STT", "ID", "Tên sản phẩm", "Doanh nghiệp", ...C.map(c => "AI TC" + c.tt + " (/" + c.max + ")"), "Tổng AI", ...C.map(c => "Của tôi TC" + c.tt), "Tổng của tôi", "Tôi đã xác nhận", ...C.map(c => "TB GK TC" + c.tt), "TB tổng GK", "Số GK đã chấm", "Xếp loại (của tôi)", "Độ tin cậy bằng chứng (AI)", "Số góp ý", "Nhận xét AI", "Phụ trách", "Trạng thái xét", "Dự thi nhiều nơi", "Cần xác minh quy mô", "Ghi chú phân công"];
+  const rows = P.map(p => { const r = CALC.per.get(p.stt); return [p.stt, p.id, p.name, p.company, ...p.ai.s, r.ai, ...C.map((c, i) => eff(S.mine, p, i)), r.mine, isDone(p.stt) ? "x" : "", ...r.crit.map(v => v == null ? "" : Math.round(v * 10) / 10), r.avg == null ? "" : Math.round(r.avg * 10) / 10, r.n, grade(r.mine), p.ai.conf, CALC.cmCount.get(p.stt) || 0, p.ai.summary, ...(() => { const c = pcf(p.stt), jd = judgeOf(p.stt); return [jd ? uName(jd) : "", c.excl ? "Loại: " + c.excl : "Đang xét", c.multi ? "x" : "", c.verify ? "x" : "", c.note || ""]; })()]; });
   return [head, ...rows];
 }
 function csvOf(aoa) { return "﻿" + aoa.map(r => r.map(v => { const s = String(v == null ? "" : v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(",")).join("\r\n"); }
@@ -1371,7 +1335,10 @@ async function boot() {
   if (user) { const me = await user.me(); S.myId = me.id; S.meName = me.name; S.meAvatar = me.avatarUrl; S.meUname = me.uname || ""; S.isAdmin = !!me.isAdmin; }
   if (!db) { S.mode = "local"; setSync("", "Chỉ xem"); render(); return; }
   S.db = db; S.mode = "live";
-  if (S.miv) S.miv.watchConfig(c => { S.cfg = { version: c.version || 0, groups: Array.isArray(c.groups) ? c.groups : [], products: c.products || {}, users: c.users || [], updatedAt: c.updatedAt, updatedBy: c.updatedBy }; render(); });
+  if (S.miv) S.miv.watchConfig(c => {
+    S.cfgServer = { version: c.version || 0, groups: Array.isArray(c.groups) ? c.groups : [], products: c.products || {}, users: c.users || [], updatedAt: c.updatedAt, updatedBy: c.updatedBy };
+    if (!S.cfgSaving && !S.cfgDirtyQ) { S.cfg = S.cfgServer; render(); } // đang lưu thay đổi của mình thì chưa ghi đè
+  });
   let can = null; try { can = user ? await user.can("data.write") : null; } catch (e) { }
   const writable = !!S.myId && can !== false;
   const timer = setTimeout(() => { if (!S.dbReady) { S.mode = "stale"; setSync("err", "Chưa kết nối"); render(); } }, 10000);
