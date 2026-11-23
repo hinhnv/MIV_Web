@@ -11,6 +11,7 @@
     if (r.status === 401) { location.href = "/login"; throw err("revoked"); }
     if (r.status === 403) throw err("invalid_argument");
     if (r.status === 413) throw err("quota_exceeded");
+    if (r.status === 409) throw err("conflict");
     if (r.status >= 500) throw err("unavailable");
     if (!r.ok) throw err("error_" + r.status);
     return r.status === 204 ? null : r.json();
@@ -18,7 +19,7 @@
 
   let meP = null;
   const user = {
-    me: () => (meP = meP || api("GET", "/api/me")).then(m => ({ id: m.id, name: m.name, avatarUrl: "" })),
+    me: () => (meP = meP || api("GET", "/api/me")).then(m => ({ id: m.id, name: m.name, avatarUrl: "", uname: m.uname, isAdmin: !!m.isAdmin })),
     can: perm => (meP = meP || api("GET", "/api/me")).then(m => perm === "data.write" ? m.canWrite : false),
     profiles: () => api("GET", "/api/profiles").catch(() => ({})),
   };
@@ -60,7 +61,22 @@
     },
   };
 
-  const caps = { user, db, downloads };
+  // Phan cong nhom / ho so bi loai (chi co tren ban tu chay; ban Artifact khong co -> trang an tinh nang nay)
+  const miv = {
+    watchConfig(cb) {
+      let version = null, stopped = false;
+      async function tick() {
+        if (stopped) return;
+        try { const c = await api("GET", "/api/config" + (version == null ? "" : "?since=" + version)); if (c) { version = c.version; cb(c); } }
+        catch (e) { if (e.code === "revoked") { stopped = true; return; } }
+        setTimeout(tick, document.hidden ? 60000 : 12000);
+      }
+      tick();
+      return () => { stopped = true; };
+    },
+    saveConfig: body => api("PUT", "/api/config", body),
+  };
+  const caps = { user, db, downloads, miv };
   window.claude = { use: async name => caps[name] || null };
 
   document.addEventListener("DOMContentLoaded", () => {

@@ -32,7 +32,8 @@ Mã màu cố định trên mọi trang: **tím** = điểm AI · **cam** = đi�
 4. Cột phải luôn hiện **tổng điểm của bạn**, so với AI và hội đồng; tab **Hồ sơ / Nhận xét AI / Giám khảo / Góp ý** để đọc thêm.
 5. Bấm nút xanh lá **✓ Xác nhận điểm & sang sản phẩm tiếp**. Điểm tự lưu ngay khi sửa; "xác nhận" để đánh dấu đã chấm xong.
 6. **Điểm AI mặc định chấm theo bộ ngưỡng v4**: mỗi thành phần xếp bậc theo bằng chứng trong hồ sơ, rồi quy đổi ra điểm theo bảng (thang 3 bậc → 1,5 / 2,5 / 3…). Ô *Lý do AI* ở mỗi tiêu chí liệt kê *Hồ sơ đang có* (kèm nguồn, trang, nhãn Kiểm chứng/Tự khai), *Vì sao cho điểm* từng thành phần và *Còn thiếu để lên bậc*. Bấm *Chấm theo thành phần* để sửa từng thành phần (mỗi nút là một bậc, số trên nút là điểm; ô tím là bậc AI chọn), tổng tự cập nhật điểm tiêu chí. Trang *Tiêu chí* gộp thể lệ, cách chấm v4 (bậc → điểm) và quy tắc chung. Giám khảo đã chấm trước khi đổi điểm AI được giữ nguyên điểm cũ.
-7. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
+7. **Phân công:** mỗi giám khảo phụ trách một nhóm lĩnh vực. Trang *Chấm điểm* mặc định lọc *Hồ sơ tôi phụ trách*; tiến độ, nút *Tiếp tục chấm* và phím `N` chỉ đi qua các hồ sơ đó. Hồ sơ đã loại có nhãn đỏ và gạch ngang (không cần chấm), nhãn vàng **★ Thi nhiều nơi** là sản phẩm dự thi nhiều hạng mục, nhãn cam **Cần xác minh quy mô** là hồ sơ phải đối chiếu chứng từ trước khi chấm. Xem toàn bộ ở trang **Phân công**.
+8. Chuyển sản phẩm: nút ‹ ›, ô chọn nhanh ở thẻ sản phẩm, hoặc phím `←` `→`; `N` sang sản phẩm chưa chấm, `/` tìm kiếm.
 
 ## Điều kiện
 
@@ -68,6 +69,7 @@ docker compose exec web node server.js deluser giamkhao1                        
 ```
 
 - Đổi mật khẩu thì các phiên đăng nhập cũ của người đó **bị đăng xuất**. Điểm đã chấm vẫn giữ (gắn với ID nội bộ, không gắn với tên).
+- **Quyền quản trị** (sửa trang *Phân công*): `docker compose exec web node server.js admin ten@donvi.vn` (thêm `off` để bỏ). `list` hiện `[quan tri]` cạnh tài khoản có quyền.
 - Không muốn mật khẩu nằm trong lịch sử shell: `printf '%s\n' '<mật khẩu>' | docker compose exec -T web node server.js user giamkhao1 - Giám khảo 1`.
 
 ## Cập nhật code / dữ liệu sản phẩm
@@ -78,10 +80,18 @@ git pull && sh deploy.sh
 
 Muốn đổi dữ liệu sản phẩm thì chạy `build_web.py` trên máy có thư mục dữ liệu, commit file `phong-cham-miv2026.html` mới, rồi pull trên server. Tài khoản và điểm nằm trong volume `miv-data` nên **không mất** khi build lại.
 
+## Phân công nhóm, hồ sơ bị loại
+
+Trang **Phân công** (mọi giám khảo xem được) cho biết nhóm lĩnh vực nào ai phụ trách, hồ sơ nào đã loại và vì sao, hồ sơ nào dự thi nhiều nơi hoặc cần xác minh quy mô. Tài khoản quản trị có thêm:
+- **Chỉnh sửa**: đổi tên nhóm, chọn giám khảo phụ trách, rồi với từng hồ sơ chọn nhóm, trạng thái (*Đang xét* / *Loại: lý do*), đánh dấu ★ / cần xác minh, ghi chú. Bấm **Lưu phân công**; trang của mọi người tự cập nhật sau khoảng 12 giây.
+- **Nhập từ file JSON** / **Tải JSON**: nạp hoặc sao lưu cả bảng phân công. Giám khảo trong file ghi bằng tên đăng nhập.
+
+Phân công lưu ở `/app/data/config.json` trong volume `miv-data`, **không** nằm trong repo.
+
 ## Sao lưu / khôi phục
 
 ```bash
-docker compose cp web:/app/data ./backup-$(date +%F)            # sao lưu (users.json, judges.json, session-secret)
+docker compose cp web:/app/data ./backup-$(date +%F)            # sao lưu (users.json, judges.json, config.json, session-secret)
 docker compose cp ./backup-2026-11-20/. web:/app/data/ && docker compose restart web   # khôi phục
 ```
 

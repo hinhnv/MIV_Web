@@ -5,6 +5,7 @@
 //   node server.js user <username> <password> <ten>  -> them/sua tai khoan (password "-" = doc tu stdin)
 //   node server.js deluser <username>                -> xoa tai khoan
 //   node server.js list | count                      -> liet ke / dem tai khoan
+//   node server.js admin <username> [off]            -> cap / bo quyen quan tri (sua trang Phan cong)
 "use strict";
 const http = require("node:http");
 const fs = require("node:fs");
@@ -17,6 +18,7 @@ const PAGE = process.env.PAGE_FILE || path.join(ROOT, "phong-cham-miv2026.html")
 const PORT = Number(process.env.PORT || 3001);
 const USERS_F = path.join(DATA, "users.json");
 const JUDGES_F = path.join(DATA, "judges.json");
+const CONFIG_F = path.join(DATA, "config.json"); // phan cong nhom, ho so bi loai, co danh dau (chi nam tren server)
 const SECRET_F = path.join(DATA, "session-secret");
 const SESSION_DAYS = 30;
 const MAX_BODY = 4 * 1024 * 1024;
@@ -37,7 +39,7 @@ const [cmd, ...args] = process.argv.slice(2);
 if (cmd === "list" || cmd === "count") {
   const users = readJson(USERS_F, {});
   if (cmd === "count") console.log(Object.keys(users).length);
-  else for (const [u, r] of Object.entries(users)) console.log(u + "\t" + r.name);
+  else for (const [u, r] of Object.entries(users)) console.log(u + "\t" + r.name + (r.admin ? "\t[quan tri]" : ""));
   process.exit(0);
 }
 // ten dang nhap: chu thuong, so, . _ - @ + (dung duoc email)
@@ -52,6 +54,15 @@ if (cmd === "rename") { // doi ten dang nhap, giu nguyen ID nen giu nguyen diem 
   console.log("da doi " + from + " -> " + to + " (giu nguyen diem da cham)");
   process.exit(0);
 }
+if (cmd === "admin") { // cap quyen quan tri: sua trang Phan cong
+  const users = readJson(USERS_F, {});
+  const u = String(args[0] || "").trim().toLowerCase();
+  if (!users[u]) { console.error("khong co tai khoan " + u); process.exit(1); }
+  if (args[1] === "off") delete users[u].admin; else users[u].admin = true;
+  writeJson(USERS_F, users);
+  console.log((users[u].admin ? "da cap" : "da bo") + " quyen quan tri cho " + u);
+  process.exit(0);
+}
 if (cmd === "user" || cmd === "deluser") {
   const users = readJson(USERS_F, {});
   let [u, pw, ...name] = args;
@@ -62,7 +73,7 @@ if (cmd === "user" || cmd === "deluser") {
   else {
     if (!pw || pw.length < 6) { console.error("password toi thieu 6 ky tu"); process.exit(1); }
     const prev = users[u] || {};
-    users[u] = { id: prev.id || crypto.randomUUID(), name: name.join(" ") || prev.name || u, pw: hashPw(pw), canWrite: true };
+    users[u] = { id: prev.id || crypto.randomUUID(), name: name.join(" ") || prev.name || u, pw: hashPw(pw), canWrite: true, ...(prev.admin ? { admin: true } : {}) };
   }
   writeJson(USERS_F, users);
   console.log(cmd === "deluser" ? "da xoa " + u : "da luu " + u + " (" + users[u].name + ")");
@@ -100,6 +111,32 @@ const fail = ip => { const f = fails.get(ip); fails.set(ip, f && Date.now() - f.
 
 /* ---------- du lieu cham ---------- */
 let store = readJson(JUDGES_F, { version: 0, docs: {} });
+let config = readJson(CONFIG_F, { version: 0, groups: [], products: {} });
+
+// Kiem tra phan cong gui len: chi nhan cac truong da biet, gioi han do dai.
+const str = (v, n) => typeof v === "string" ? v.trim().slice(0, n) : "";
+function cleanConfig(b) {
+  if (!b || typeof b !== "object" || !Array.isArray(b.groups) || !b.products || typeof b.products !== "object" || Array.isArray(b.products)) return null;
+  if (b.groups.length > 20 || Object.keys(b.products).length > 500) return null;
+  const groups = [];
+  for (const g of b.groups) {
+    if (!g || typeof g !== "object" || !/^[\w-]{1,24}$/.test(g.id) || groups.some(x => x.id === g.id)) return null;
+    groups.push({ id: g.id, short: str(g.short, 40), name: str(g.name, 200),
+      judges: Array.isArray(g.judges) ? [...new Set(g.judges.map(j => str(j, 64).toLowerCase()).filter(Boolean))].slice(0, 10) : [] });
+  }
+  const products = {};
+  for (const [k, v] of Object.entries(b.products)) {
+    if (!/^\d{1,4}$/.test(k) || !v || typeof v !== "object" || Array.isArray(v)) return null;
+    const o = {};
+    const grp = str(v.group, 24); if (grp && groups.some(g => g.id === grp)) o.group = grp;
+    const excl = str(v.excl, 200); if (excl) o.excl = excl;
+    if (v.multi === true) o.multi = true;
+    if (v.verify === true) o.verify = true;
+    const note = str(v.note, 1000); if (note) o.note = note;
+    if (Object.keys(o).length) products[k] = o;
+  }
+  return { groups, products };
+}
 
 /* ---------- trang ---------- */
 const HEAD = '<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/claude-shim.js"></script>';
@@ -158,7 +195,22 @@ async function route(req, res) {
   if (!me) return p.startsWith("/api/") ? send(res, 401, { error: "unauthenticated" }) : send(res, 302, "", "text/plain", { Location: "/login" });
 
   if (p === "/" && req.method === "GET") return send(res, 200, pageHtml(), "text/html; charset=utf-8");
-  if (p === "/api/me") return send(res, 200, { id: me.id, name: me.name, canWrite: me.canWrite !== false });
+  if (p === "/api/me") return send(res, 200, { id: me.id, name: me.name, uname: me.uname, canWrite: me.canWrite !== false, isAdmin: me.admin === true });
+  if (p === "/api/config" && req.method === "GET") {
+    if (url.searchParams.get("since") === String(config.version)) return send(res, 204, "");
+    const users = Object.entries(readJson(USERS_F, {})).map(([uname, u]) => ({ uname, name: u.name }));
+    return send(res, 200, { ...config, users });
+  }
+  if (p === "/api/config" && req.method === "PUT") {
+    if (me.admin !== true) { log("config_save_forbidden", { user: me.uname }); return send(res, 403, { error: "forbidden" }); }
+    let b; try { b = JSON.parse(await readBody(req)); } catch (e) { if (e.status) throw e; return send(res, 400, { error: "bad json" }); }
+    if (!b || b.base !== config.version) return send(res, 409, { error: "conflict", version: config.version });
+    const c = cleanConfig(b); if (!c) return send(res, 400, { error: "bad config" });
+    const next = { version: config.version + 1, updatedAt: new Date().toISOString(), updatedBy: me.name, ...c };
+    writeJson(CONFIG_F, next); config = next; // ghi file xong moi doi state
+    log("config_saved", { user: me.uname, version: config.version, groups: c.groups.length, products: Object.keys(c.products).length });
+    return send(res, 200, { version: config.version });
+  }
   if (p === "/api/profiles") {
     const out = {}; for (const u of Object.values(readJson(USERS_F, {}))) out[u.id] = { name: u.name, avatarUrl: "" };
     return send(res, 200, out);
